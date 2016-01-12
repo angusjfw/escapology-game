@@ -1,15 +1,5 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
-  var autoDetectRenderer = PIXI.autoDetectRenderer;
-  var loader = PIXI.loader;
-  var resources = PIXI.loader.resources;
-  var Container = PIXI.Container;
-  var TextureCache = PIXI.utils.TextureCache;
-  var Rectangle = PIXI.Rectangle;
-  var Sprite = PIXI.Sprite;
-  var Text = PIXI.Text;
-  var Graphics = PIXI.Graphics;
-
   var renderer = new autoDetectRenderer(512, 512);
   var stage = new Container();
   document.body.appendChild(renderer.view);
