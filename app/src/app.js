@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function(event) {
-
   var renderer = new autoDetectRenderer(512, 512);
   var stage = new Container();
   document.body.appendChild(renderer.view);
@@ -8,66 +7,88 @@ document.addEventListener("DOMContentLoaded", function(event) {
     .add(["images/treasureHunter.json"])
     .load(setup);
 
-  var state, explorer, treasure, chimes, exit, player, dungeon,
-      door, healthBar, message, gameScene, gameOverScene, id;
-
+  var state, message, gameScene, gameOverScene;
+  var dungeon, door, explorer, treasure, healthBar, id;
   var blobs, blob, spacing, xOffset, xBlob, yBlob, speed, direction;
 
   function setup() {
     gameScene = new Container();
     stage.addChild(gameScene);
-    setupSprites(gameScene);
-
-    var left = keyboard(37),
-    up = keyboard(38),
-    right = keyboard(39),
-    down = keyboard(40);
-
-    left.press = function() {
-      explorer.vx = -5;
-      explorer.vy = 0;
-    };
-    left.release = function() {
-      if (!right.isDown && explorer.vy === 0) {
-        explorer.vx = 0;
-      }
-    };
-
-    up.press = function() {
-      explorer.vy = -5;
-      explorer.vx = 0;
-    };
-    up.release = function() {
-      if (!down.isDown && explorer.vx === 0) {
-        explorer.vy = 0;
-      }
-    };
-
-    right.press = function() {
-      explorer.vx = 5;
-      explorer.vy = 0;
-    };
-    right.release = function() {
-      if (!left.isDown && explorer.vy === 0) {
-        explorer.vx = 0;
-      }
-    };
-
-    down.press = function() {
-      explorer.vy = 5;
-      explorer.vx = 0;
-    };
-    down.release = function() {
-      if (!up.isDown && explorer.vx === 0) {
-        explorer.vy = 0;
-      }
-    };
-
+    setUpSprites(gameScene);
+    setUpControls();
     state = play;
     gameLoop();
   }
 
-  function setupSprites(gameScene) {
+  function gameLoop(){
+    requestAnimationFrame(gameLoop);
+    state(); //either play() or end()
+    renderer.render(stage);
+  }
+
+  function play() {
+    explorer.move();
+    moveBlobsAndTestHit();
+    reactToHit();
+    carryTreasure();
+    checkLoss();
+    checkWin();
+  }
+
+  function end() {
+    gameScene.visible = false;
+    gameOverScene.visible = true;
+  }
+
+  function moveBlobsAndTestHit() {
+    explorer.hit = false;
+    blobs.forEach(function(blob) {
+      moveBlob(blob);
+      if (hitTestRectangle(explorer, blob)) {
+        explorer.hit = true;
+      }
+   });
+  }
+
+  function moveBlob(blob) {
+    blob.y += blob.vy;
+    var blobHitsWall = contain(blob, {x: 28, y: 10, width: 488, height: 480});
+    if (blobHitsWall === "top" || blobHitsWall === "bottom") {
+      blob.vy *= -1;
+    }
+  }
+
+  function reactToHit() {
+    if(explorer.hit) {
+      explorer.alpha = 0.5;
+      healthBar.outer.width -= 1;
+    } else {
+      explorer.alpha = 1;
+    }
+  }
+
+  function carryTreasure(){
+    if (hitTestRectangle(explorer, treasure)) {
+      treasure.x = explorer.x + 8;
+      treasure.y = explorer.y + 8;
+    }
+  }
+
+  function checkWin() {
+    if (hitTestRectangle(treasure, door)) {
+      state = end;
+      message.text = "You won!";
+    }
+  }
+
+  function checkLoss() {
+    if (healthBar.outer.width < 0) {
+      state = end;
+      message.text = "You lost!";
+    }
+  }
+
+  function setUpSprites(gameScene) {
     id = resources["images/treasureHunter.json"].textures;
 
     dungeon = new Dungeon(id["dungeon.png"]);
@@ -133,67 +154,50 @@ document.addEventListener("DOMContentLoaded", function(event) {
     gameOverScene.addChild(message);
   }
 
-  function gameLoop(){
-    requestAnimationFrame(gameLoop);
-    state();
-    renderer.render(stage);
-  }
+  function setUpControls() {
+    var left = keyboard(37),
+    up = keyboard(38),
+    right = keyboard(39),
+    down = keyboard(40);
 
-  function moveBlobsAndTestHit() {
-    blobs.forEach(function(blob) {
-      moveBlob(blob);
-      if (hitTestRectangle(explorer, blob)) {
-        explorer.hit = true;
+    left.press = function() {
+      explorer.vx = -5;
+      explorer.vy = 0;
+    };
+    left.release = function() {
+      if (!right.isDown && explorer.vy === 0) {
+        explorer.vx = 0;
       }
-   });
-  }
+    };
 
-  function moveBlob(blob) {
-    blob.y += blob.vy;
-    var blobHitsWall = contain(blob, {x: 28, y: 10, width: 488, height: 480});
-    if (blobHitsWall === "top" || blobHitsWall === "bottom") {
-      blob.vy *= -1;
-    }
-  }
+    up.press = function() {
+      explorer.vy = -5;
+      explorer.vx = 0;
+    };
+    up.release = function() {
+      if (!down.isDown && explorer.vx === 0) {
+        explorer.vy = 0;
+      }
+    };
 
-  function reactToHit() {
-    if(explorer.hit) {
-      explorer.alpha = 0.5;
-      healthBar.outer.width -= 1;
-    } else {
-      explorer.alpha = 1;
-    }
-  }
+    right.press = function() {
+      explorer.vx = 5;
+      explorer.vy = 0;
+    };
+    right.release = function() {
+      if (!left.isDown && explorer.vy === 0) {
+        explorer.vx = 0;
+      }
+    };
 
-  function play() {
-    explorer.move();
-
-    explorer.hit = false;
-    moveBlobsAndTestHit();
-    reactToHit();
-
-    //Check for a collision between the explorer and the treasure
-    if (hitTestRectangle(explorer, treasure)) {
-      //If the treasure is touching the explorer, center it over the explorer
-      treasure.x = explorer.x + 8;
-      treasure.y = explorer.y + 8;
-    }
-    //Does the explorer have enough health? If the width of the `innerBar`
-    //is less than zero, end the game and display "You lost!"
-    if (healthBar.outer.width < 0) {
-      state = end;
-      message.text = "You lost!";
-    }
-    //If the explorer has brought the treasure to the exit,
-    //end the game and display "You won!"
-    if (hitTestRectangle(treasure, door)) {
-      state = end;
-      message.text = "You won!";
-    }
-  }
-
-  function end() {
-    gameScene.visible = false;
-    gameOverScene.visible = true;
+    down.press = function() {
+      explorer.vy = 5;
+      explorer.vx = 0;
+    };
+    down.release = function() {
+      if (!up.isDown && explorer.vx === 0) {
+        explorer.vy = 0;
+      }
+    };
   }
 });
