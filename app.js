@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     explorer.y = stage.height / 2 - explorer.height / 2;
     gameScene.addChild(explorer);
 
-    treasure = new Sprite(id["treasure.png"]);
+    treasure = new Treasure(id["treasure.png"]);
     treasure.x = stage.width - treasure.width - 48;
     treasure.y = stage.height / 2 - treasure.height / 2;
     gameScene.addChild(treasure);
@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         explorer.hit = true;
       }
     });
-  
+
     if(explorer.hit) {
       //Make the explorer semi-transparent
       explorer.alpha = 0.5;
