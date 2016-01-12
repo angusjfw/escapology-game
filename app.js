@@ -22,10 +22,62 @@ document.addEventListener("DOMContentLoaded", function(event) {
       door, healthBar, message, gameScene, gameOverScene, enemies, id;
   
   var blobs, blob, spacing, xOffset, xBlob, yBlob, speed, direction;
-
+    
   function setup() {
     gameScene = new Container();
     stage.addChild(gameScene);
+    setupSprites(gameScene);
+    
+    var left = keyboard(37),
+    up = keyboard(38),
+    right = keyboard(39),
+    down = keyboard(40);
+
+    left.press = function() {
+      explorer.vx = -5;
+      explorer.vy = 0;
+    };
+    left.release = function() {
+      if (!right.isDown && explorer.vy === 0) {
+        explorer.vx = 0;
+      }
+    };
+    
+    up.press = function() {
+      explorer.vy = -5;
+      explorer.vx = 0;
+    };
+    up.release = function() {
+      if (!down.isDown && explorer.vx === 0) {
+        explorer.vy = 0;
+      }
+    };
+
+    right.press = function() {
+      explorer.vx = 5;
+      explorer.vy = 0;
+    };
+    right.release = function() {
+      if (!left.isDown && explorer.vy === 0) {
+        explorer.vx = 0;
+      }
+    };
+    
+    down.press = function() {
+      explorer.vy = 5;
+      explorer.vx = 0;
+    };
+    down.release = function() {
+      if (!up.isDown && explorer.vx === 0) {
+        explorer.vy = 0;
+      }
+    };
+
+    state = play;
+    gameLoop();
+  }
+
+  function setupSprites(gameScene) {
     id = resources["images/treasureHunter.json"].textures; 
 
     dungeon = new Sprite(id["dungeon.png"]);
@@ -35,11 +87,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     door.position.set(32, 0);
     gameScene.addChild(door);
 
-    explorer = new Sprite(id["explorer.png"]);
+    explorer = new Explorer(id["explorer.png"]);
     explorer.x = 68;
     explorer.y = stage.height / 2 - explorer.height / 2;
-    explorer.vx = 0;
-    explorer.vy = 0;
     gameScene.addChild(explorer);
 
     treasure = new Sprite(id["treasure.png"]);
@@ -91,54 +141,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     message.x = 120;
     message.y = stage.height / 2 - 32;
     gameOverScene.addChild(message);
-    
-    var left = keyboard(37),
-    up = keyboard(38),
-    right = keyboard(39),
-    down = keyboard(40);
-
-    left.press = function() {
-      explorer.vx = -5;
-      explorer.vy = 0;
-    };
-    left.release = function() {
-      if (!right.isDown && explorer.vy === 0) {
-        explorer.vx = 0;
-      }
-    };
-    
-    up.press = function() {
-      explorer.vy = -5;
-      explorer.vx = 0;
-    };
-    up.release = function() {
-      if (!down.isDown && explorer.vx === 0) {
-        explorer.vy = 0;
-      }
-    };
-
-    right.press = function() {
-      explorer.vx = 5;
-      explorer.vy = 0;
-    };
-    right.release = function() {
-      if (!left.isDown && explorer.vy === 0) {
-        explorer.vx = 0;
-      }
-    };
-    
-    down.press = function() {
-      explorer.vy = 5;
-      explorer.vx = 0;
-    };
-    down.release = function() {
-      if (!up.isDown && explorer.vx === 0) {
-        explorer.vy = 0;
-      }
-    };
-
-    state = play;
-    gameLoop();
   }
 
   function gameLoop(){
@@ -152,13 +154,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function play() {
-    explorer.x += explorer.vx;
-    explorer.y += explorer.vy;
+    explorer.move();
     //Contain the explorer inside the area of the dungeon
     contain(explorer, {x: 28, y: 10, width: 488, height: 480});
     //contain(explorer, stage);
     //Set `explorerHit` to `false` before checking for a collision
-    var explorerHit = false;
+    explorer.hit = false;
     //Loop through all the sprites in the `enemies` array
     blobs.forEach(function(blob) {
       //Move the blob
@@ -173,11 +174,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
       //Test for a collision. If any of the enemies are touching
       //the explorer, set `explorerHit` to `true`
       if(hitTestRectangle(explorer, blob)) {
-        explorerHit = true;
+        explorer.hit = true;
       }
     });
   
-    if(explorerHit) {
+    if(explorer.hit) {
       //Make the explorer semi-transparent
       explorer.alpha = 0.5;
       //Reduce the width of the health bar's inner rectangle by 1 pixel

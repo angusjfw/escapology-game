@@ -1,0 +1,16 @@
+function Explorer(texture) {
+  PIXI.Sprite.call(this, texture);
+  this.x = 0;
+  this.y = 0;
+  this.vx = 0;
+  this.vy = 0;
+  this.hit = false;
+}
+
+Explorer.constructor = Explorer;
+Explorer.prototype = Object.create(PIXI.Sprite.prototype);
+
+Explorer.prototype.move = function() {
+  this.x += this.vx;
+  this.y += this.vy;
+};
