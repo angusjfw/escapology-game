@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     .load(setup);
 
   var state, explorer, treasure, chimes, exit, player, dungeon,
-      door, healthBar, message, gameScene, gameOverScene, enemies, id;
+      door, healthBar, message, gameScene, gameOverScene, id;
 
   var blobs, blob, spacing, xOffset, xBlob, yBlob, speed, direction;
 
@@ -149,31 +149,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
     renderer.render(stage);
   }
 
-  function play() {
-    explorer.move();
-    //Contain the explorer inside the area of the dungeon
-    contain(explorer, {x: 28, y: 10, width: 488, height: 480});
-    //contain(explorer, stage);
-    //Set `explorerHit` to `false` before checking for a collision
-    explorer.hit = false;
-    //Loop through all the sprites in the `enemies` array
+  function moveBlobsAndTestHit() {
     blobs.forEach(function(blob) {
-      //Move the blob
-      blob.y += blob.vy;
-      //Check the blob's screen boundaries
-      var blobHitsWall = contain(blob, {x: 28, y: 10, width: 488, height: 480});
-      //If the blob hits the top or bottom of the stage, reverse
-      //its direction
-      if (blobHitsWall === "top" || blobHitsWall === "bottom") {
-        blob.vy *= -1;
-      }
-      //Test for a collision. If any of the enemies are touching
-      //the explorer, set `explorerHit` to `true`
-      if(hitTestRectangle(explorer, blob)) {
-        explorer.hit = true;
-      }
-    });
-  
+      moveBlob(blob);
+      explorer.hit = hitTestRectangle(explorer, blob);
+   });
+  }
+
+  function moveBlob(blob) {
+    blob.y += blob.vy;
+    var blobHitsWall = contain(blob, {x: 28, y: 10, width: 488, height: 480});
+    if (blobHitsWall === "top" || blobHitsWall === "bottom") {
+      blob.vy *= -1;
+    }
+  }
+
+  function reactToHit() {
     if(explorer.hit) {
       //Make the explorer semi-transparent
       explorer.alpha = 0.5;
@@ -183,6 +174,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
       //Make the explorer fully opaque (non-transparent) if it hasn't been hit
       explorer.alpha = 1;
     }
+  }
+
+  function play() {
+    explorer.move();
+
+    explorer.hit = false;
+    moveBlobsAndTestHit();
+    reactToHit(); 
+    
     //Check for a collision between the explorer and the treasure
     if (hitTestRectangle(explorer, treasure)) {
       //If the treasure is touching the explorer, center it over the explorer
