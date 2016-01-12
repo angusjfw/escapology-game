@@ -1,5 +1,5 @@
-document.addEventListener("DOMContentLoaded", function(event) { 
-  
+document.addEventListener("DOMContentLoaded", function(event) {
+
   var autoDetectRenderer = PIXI.autoDetectRenderer;
   var loader = PIXI.loader;
   var resources = PIXI.loader.resources;
@@ -20,14 +20,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   var state, explorer, treasure, chimes, exit, player, dungeon,
       door, healthBar, message, gameScene, gameOverScene, enemies, id;
-  
+
   var blobs, blob, spacing, xOffset, xBlob, yBlob, speed, direction;
-    
+
   function setup() {
     gameScene = new Container();
     stage.addChild(gameScene);
     setupSprites(gameScene);
-    
+
     var left = keyboard(37),
     up = keyboard(38),
     right = keyboard(39),
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         explorer.vx = 0;
       }
     };
-    
+
     up.press = function() {
       explorer.vy = -5;
       explorer.vx = 0;
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         explorer.vx = 0;
       }
     };
-    
+
     down.press = function() {
       explorer.vy = 5;
       explorer.vx = 0;
@@ -78,12 +78,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function setupSprites(gameScene) {
-    id = resources["images/treasureHunter.json"].textures; 
+    id = resources["images/treasureHunter.json"].textures;
 
     dungeon = new Sprite(id["dungeon.png"]);
     gameScene.addChild(dungeon);
 
-    door = new Sprite(id["door.png"]); 
+    door = new Sprite(id["door.png"]);
     door.position.set(32, 0);
     gameScene.addChild(door);
 
@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
       blobs.push(blob);
       gameScene.addChild(blob);
     }
-    
+
     healthBar = new Container();
     healthBar.position.set(stage.width - 170, 6);
     gameScene.addChild(healthBar);
@@ -130,12 +130,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
     outerBar.endFill();
     healthBar.addChild(outerBar);
     healthBar.outer = outerBar;
-    
+
     gameOverScene = new Container();
     stage.addChild(gameOverScene);
     gameOverScene.visible = false;
     message = new Text(
-        "The End!", 
+        "The End!",
         {font: "64px Futura", fill: "white"}
         );
     message.x = 120;
@@ -147,10 +147,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     requestAnimationFrame(gameLoop);
     state();
     renderer.render(stage);
-  }
-
-  function randomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   function play() {
@@ -204,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if (hitTestRectangle(treasure, door)) {
       state = end;
       message.text = "You won!";
-    } 
+    }
   }
 
   function end() {
