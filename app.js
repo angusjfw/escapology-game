@@ -80,10 +80,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function setupSprites(gameScene) {
     id = resources["images/treasureHunter.json"].textures;
 
-    dungeon = new Sprite(id["dungeon.png"]);
+    dungeon = new Dungeon(id["dungeon.png"]);
     gameScene.addChild(dungeon);
 
-    door = new Sprite(id["door.png"]);
+    door = new Door(id["door.png"]);
     door.position.set(32, 0);
     gameScene.addChild(door);
 
@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     blobs.forEach(function(blob) {
       moveBlob(blob);
       if (hitTestRectangle(explorer, blob)) {
-        explorer.hit = true;   
+        explorer.hit = true;
       }
    });
   }
@@ -180,8 +180,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     explorer.hit = false;
     moveBlobsAndTestHit();
-    reactToHit(); 
-    
+    reactToHit();
+
     //Check for a collision between the explorer and the treasure
     if (hitTestRectangle(explorer, treasure)) {
       //If the treasure is touching the explorer, center it over the explorer
