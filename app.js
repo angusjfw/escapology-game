@@ -22,10 +22,62 @@ document.addEventListener("DOMContentLoaded", function(event) {
       door, healthBar, message, gameScene, gameOverScene, enemies, id;
   
   var blobs, blob, spacing, xOffset, xBlob, yBlob, speed, direction;
-
+    
   function setup() {
     gameScene = new Container();
     stage.addChild(gameScene);
+    setupSprites(gameScene);
+    
+    var left = keyboard(37),
+    up = keyboard(38),
+    right = keyboard(39),
+    down = keyboard(40);
+
+    left.press = function() {
+      explorer.vx = -5;
+      explorer.vy = 0;
+    };
+    left.release = function() {
+      if (!right.isDown && explorer.vy === 0) {
+        explorer.vx = 0;
+      }
+    };
+    
+    up.press = function() {
+      explorer.vy = -5;
+      explorer.vx = 0;
+    };
+    up.release = function() {
+      if (!down.isDown && explorer.vx === 0) {
+        explorer.vy = 0;
+      }
+    };
+
+    right.press = function() {
+      explorer.vx = 5;
+      explorer.vy = 0;
+    };
+    right.release = function() {
+      if (!left.isDown && explorer.vy === 0) {
+        explorer.vx = 0;
+      }
+    };
+    
+    down.press = function() {
+      explorer.vy = 5;
+      explorer.vx = 0;
+    };
+    down.release = function() {
+      if (!up.isDown && explorer.vx === 0) {
+        explorer.vy = 0;
+      }
+    };
+
+    state = play;
+    gameLoop();
+  }
+
+  function setupSprites(gameScene) {
     id = resources["images/treasureHunter.json"].textures; 
 
     dungeon = new Sprite(id["dungeon.png"]);
@@ -91,54 +143,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     message.x = 120;
     message.y = stage.height / 2 - 32;
     gameOverScene.addChild(message);
-    
-    var left = keyboard(37),
-    up = keyboard(38),
-    right = keyboard(39),
-    down = keyboard(40);
-
-    left.press = function() {
-      explorer.vx = -5;
-      explorer.vy = 0;
-    };
-    left.release = function() {
-      if (!right.isDown && explorer.vy === 0) {
-        explorer.vx = 0;
-      }
-    };
-    
-    up.press = function() {
-      explorer.vy = -5;
-      explorer.vx = 0;
-    };
-    up.release = function() {
-      if (!down.isDown && explorer.vx === 0) {
-        explorer.vy = 0;
-      }
-    };
-
-    right.press = function() {
-      explorer.vx = 5;
-      explorer.vy = 0;
-    };
-    right.release = function() {
-      if (!left.isDown && explorer.vy === 0) {
-        explorer.vx = 0;
-      }
-    };
-    
-    down.press = function() {
-      explorer.vy = 5;
-      explorer.vx = 0;
-    };
-    down.release = function() {
-      if (!up.isDown && explorer.vx === 0) {
-        explorer.vy = 0;
-      }
-    };
-
-    state = play;
-    gameLoop();
   }
 
   function gameLoop(){
