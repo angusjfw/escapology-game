@@ -13,5 +13,5 @@ Explorer.prototype = Object.create(PIXI.Sprite.prototype);
 Explorer.prototype.move = function() {
   this.x += this.vx;
   this.y += this.vy;
-  contain(explorer, {x: 28, y: 10, width: 488, height: 480});
+  contain(this, {x: 28, y: 10, width: 488, height: 480});
 };

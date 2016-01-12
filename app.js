@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     explorer.y = stage.height / 2 - explorer.height / 2;
     gameScene.addChild(explorer);
 
-    treasure = new Sprite(id["treasure.png"]);
+    treasure = new Treasure(id["treasure.png"]);
     treasure.x = stage.width - treasure.width - 48;
     treasure.y = stage.height / 2 - treasure.height / 2;
     gameScene.addChild(treasure);
@@ -152,7 +152,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function moveBlobsAndTestHit() {
     blobs.forEach(function(blob) {
       moveBlob(blob);
-      explorer.hit = hitTestRectangle(explorer, blob);
+      if (hitTestRectangle(explorer, blob)) {
+        explorer.hit = true;   
+      }
    });
   }
 
@@ -166,12 +168,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function reactToHit() {
     if(explorer.hit) {
-      //Make the explorer semi-transparent
       explorer.alpha = 0.5;
-      //Reduce the width of the health bar's inner rectangle by 1 pixel
       healthBar.outer.width -= 1;
     } else {
-      //Make the explorer fully opaque (non-transparent) if it hasn't been hit
       explorer.alpha = 1;
     }
   }
