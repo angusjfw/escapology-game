@@ -1,3 +1,20 @@
+var state, level, gameScene, newLevelScene, gameOverScene;
+var maxLevel = 3;
+var friction = false;
+var ice = false;
+
+var endMessage, levelMessage;  
+var font = {font: "64px Futura", fill: "white"};
+
+var id, dungeon, door, explorer, treasure, blob, arrow, healthBar;
+var arrows = [],
+  arrowSpeed = 3;
+var blobs = [],
+    numberOfBlobs = 6,
+    blobSpacing = 48,
+    blobXOffset = 150,
+    blobSpeed = 2;
+
 document.addEventListener("DOMContentLoaded", function(event) {
   var renderer = new autoDetectRenderer(512, 512);
   var stage = new Container();
@@ -8,24 +25,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     .add(["images/arrow.png"])
     .add(["images/icyDungeon.png"])
     .load(setup);
-
-  var state, level, gameScene, newLevelScene, gameOverScene, id;
-  var endMessage, levelMessage;  
-  var friction = false;
-  var maxLevel = 3;
-  var font = {font: "64px Futura", fill: "white"};
-
-  var dungeon, door, explorer, treasure, blob, arrow, healthBar;
-  var arrows = [];
-  var i = 1;
-  var blobs = [],
-      numberOfBlobs = 6,
-      blobSpacing = 48,
-      blobXOffset = 150,
-      blobSpeed = 2;
-      arrowSpeed = 1;
-
-  var left, up, right, down;
 
   function setup() {
     gameScene = new Container();
@@ -39,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function gameLoop(){
     renderer.render(stage);
-    i += 1;
     state(function() {
       requestAnimationFrame(gameLoop);
     });
@@ -51,8 +49,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
       applyFriction(explorer, 0.05);
     }
     explorer.hit = false;
-    moveArrowsAndTestHit();
-    moveBlobsAndTestHit();
+    if (blobs.length !== 0) {
+      moveBlobsAndTestHit();
+    }
+    if (arrows.length !== 0) {
+      moveArrowsAndTestHit();
+    }
     reactToHit();
     carryTreasure();
     checkLoss();
@@ -69,16 +71,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
     setTimeout(function() {
       switch (level) {
         case 2:
+        blobs = clearEnemies(blobs);
         createArrowWave();
-        setInterval(function(){
+        arrowMaker = setInterval(function(){
           createArrowWave();
-        },2500);
+        },1000);
           break;
         case 3:
+          clearInterval(arrowMaker);
+          arrows = clearEnemies(arrows);
           icyDungeon();
-          unsetKeys();
-          setUpIceControls(explorer);
           friction = true;
+          ice = true;
           break;
       }
 
@@ -88,12 +92,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
       resetTreasure();
       cb();
     }, 800);
-  }
-
-  function createArrowWave(){
-    for (i = 0; i < 5; i++) {
-      createArrow(20, 60+(i*100));
-    }
   }
 
   function end(cb) {
@@ -209,6 +207,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
     treasure.y = stage.height / 2 - treasure.height / 2;
   }
 
+  function createBlob(i) {
+    blob = new Blob(id["blob.png"]);
+    blob.x = blobSpacing * i + blobXOffset;
+    blob.y = randomInt(0, stage.height - blob.height);
+    blob.vy = blobSpeed * (i % 2 === 0) ? 1:-1;
+  }
+
   function createArrow(x, y) {
     arrow = new Arrow(resources["images/arrow.png"].texture);
     arrow.width = 20;
@@ -220,15 +225,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
     gameScene.addChild(arrow);
   }
 
-  function createBlob(i) {
-    blob = new Blob(id["blob.png"]);
-    blob.x = blobSpacing * i + blobXOffset;
-    blob.y = randomInt(0, stage.height - blob.height);
-    blob.vy = blobSpeed * (i % 2 === 0) ? 1:-1;
+  function createArrowWave(){
+    for (var i = 0; i < 5; i++) {
+      createArrow(20, 60+(i*100));
+    }
   }
 
   function icyDungeon() {
     dungeon = new Dungeon(resources["images/icyDungeon.png"].texture);
     gameScene.addChildAt(dungeon, 1);
+  }
+
+  function clearEnemies(type) {
+    type.forEach(function(enemy) {
+      gameScene.removeChild(enemy);
+    });
+    return [];
   }
 });
