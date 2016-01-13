@@ -6,10 +6,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
   loader
     .add(["images/treasureHunter.json"])
     .add(["images/arrow.png"])
+    .add(["images/icyDungeon.png"])
     .load(setup);
 
   var state, level, gameScene, newLevelScene, gameOverScene, id;
   var endMessage, levelMessage;  
+  var friction = false;
   var maxLevel = 3;
   var font = {font: "64px Futura", fill: "white"};
 
@@ -21,6 +23,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
       blobXOffset = 150,
       blobSpeed = 2;
       arrowSpeed = 1;
+
+  var left, up, right, down;
 
   function setup() {
     gameScene = new Container();
@@ -41,6 +45,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function play(cb) {
     explorer.move();
+    if (friction) {
+      applyFriction(explorer, 0.05);
+    }
     explorer.hit = false;
     moveArrowsAndTestHit();
     moveBlobsAndTestHit();
@@ -52,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function level_setup(cb) {
-    console.log('new level');
     levelMessage.text = "Level " + level + "!";
     gameScene.visible = false;
     newLevelScene.visible = true;
@@ -65,7 +71,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
           createArrow(40, 80);
           break;
         case 3:
-          //setUpIceControls(explorer);
+          icyDungeon();
+          unsetKeys();
+          setUpIceControls(explorer);
+          friction = true;
           break;
       }
 
@@ -206,5 +215,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     blob.x = blobSpacing * i + blobXOffset;
     blob.y = randomInt(0, stage.height - blob.height);
     blob.vy = blobSpeed * (i % 2 === 0) ? 1:-1;
+  }
+
+  function icyDungeon() {
+    dungeon = new Dungeon(resources["images/icyDungeon.png"].texture);
+    gameScene.addChildAt(dungeon, 1);
   }
 });

@@ -1,5 +1,5 @@
 function setUpControls(sprite) {
-  var left = keyboard(37),
+    left = keyboard(37),
     up = keyboard(38),
     right = keyboard(39),
     down = keyboard(40);

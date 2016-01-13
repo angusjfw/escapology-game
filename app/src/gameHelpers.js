@@ -1,3 +1,21 @@
+function applyFriction(sprite, force) {
+  if (sprite.vx > 0) {
+    sprite.vx -= force;
+  }
+
+  if (sprite.vx < 0) {
+    sprite.vx += force;
+  }
+
+  if (sprite.vy > 0) {
+    sprite.vy -= force;
+  }
+
+  if (sprite.vx > 0) {
+    sprite.vy += force;
+  }
+}
+
 function contain(sprite, container) {
   var collision;
   if (sprite.x < container.x) {
