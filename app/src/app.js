@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   var dungeon, door, explorer, treasure, blob, arrow, healthBar;
   var arrows = [];
+  var i = 1;
   var blobs = [],
       numberOfBlobs = 6,
       blobSpacing = 48,
@@ -38,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function gameLoop(){
     renderer.render(stage);
+    i += 1;
     state(function() {
       requestAnimationFrame(gameLoop);
     });
@@ -67,8 +69,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     setTimeout(function() {
       switch (level) {
         case 2:
-          createArrow(40, 40);
-          createArrow(40, 80);
+        createArrowWave();
+        setInterval(function(){
+          createArrowWave();
+        },2500);
           break;
         case 3:
           icyDungeon();
@@ -84,6 +88,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
       resetTreasure();
       cb();
     }, 800);
+  }
+
+  function createArrowWave(){
+    for (i = 0; i < 5; i++) {
+      createArrow(20, 60+(i*100));
+    }
   }
 
   function end(cb) {
