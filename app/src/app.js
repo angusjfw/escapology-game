@@ -5,15 +5,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   loader
     .add(["images/treasureHunter.json"])
+    .add(["images/arrow.png"])
     .load(setup);
 
   var state, gameScene, gameOverScene, id;
-  var dungeon, door, explorer, treasure, blob, healthBar, message;
+  var dungeon, door, explorer, treasure, blob, healthBar, message, arrow;
   var blobs = [],
       numberOfBlobs = 6,
       blobSpacing = 48,
       blobXOffset = 150,
       blobSpeed = 2;
+      arrowSpeed = 2;
 
   function setup() {
     gameScene = new Container();
@@ -32,6 +34,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function play() {
     explorer.move();
+    explorer.hit = false;
+    moveArrowsAndTestHit();
     moveBlobsAndTestHit();
     reactToHit();
     carryTreasure();
@@ -45,13 +49,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function moveBlobsAndTestHit() {
-    explorer.hit = false;
+
     blobs.forEach(function(blob) {
       blob.move();
       if (hitTestRectangle(explorer, blob)) {
         explorer.hit = true;
       }
    });
+  }
+
+  function moveArrowsAndTestHit() {
+
+      arrow.move();
+      if (hitTestRectangle(explorer, arrow)) {
+        explorer.hit = true;
+
+   }
   }
 
   function reactToHit() {
@@ -87,6 +100,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function setUpSprites(gameScene) {
     id = resources["images/treasureHunter.json"].textures;
 
+
     dungeon = new Dungeon(id["dungeon.png"]);
     gameScene.addChild(dungeon);
 
@@ -103,6 +117,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     treasure.x = stage.width - treasure.width - 48;
     treasure.y = stage.height / 2 - treasure.height / 2;
     gameScene.addChild(treasure);
+
+    arrow = new Arrow(resources["images/arrow.png"].texture);
+    arrow.width = 40;
+    arrow.height = 40;
+    arrow.rotation = 1.6;
+    arrow.position.set(40, 40);
+    arrow.vx = arrowSpeed;
+    gameScene.addChild(arrow);
 
     for (var i = 0; i < numberOfBlobs; i++) {
       blob = new Blob(id["blob.png"]);
