@@ -1,13 +1,13 @@
 var state, level, gameScene, newLevelScene, gameOverScene;
+var endMessage, levelMessage;
+var level = 1;
 var maxLevel = 3;
 var ice = false;
-
-var endMessage, levelMessage;  
 var font = {font: "64px Futura", fill: "white"};
 
 var id, dungeon, door, explorer, treasure, blob, arrow, healthBar;
 var arrows = [],
-  arrowSpeed = 3;
+    arrowSpeed = 3;
 var blobs = [],
     numberOfBlobs = 6,
     blobSpacing = 48,
@@ -30,24 +30,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
     stage.addChild(gameScene);
     setUpSprites(gameScene);
     setUpControls(explorer);
-    level = 1;
     state = play;
     gameLoop();
   }
 
   function gameLoop(){
-    renderer.render(stage);
     state(function() {
+      renderer.render(stage);
       requestAnimationFrame(gameLoop);
     });
   }
 
   function play(cb) {
     explorer.move();
-    if (ice) {
-      applyFriction(explorer, 0.05);
-    }
-    explorer.hit = false;
     if (blobs.length !== 0) {
       moveBlobsAndTestHit();
     }

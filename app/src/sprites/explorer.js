@@ -13,5 +13,9 @@ Explorer.prototype = Object.create(PIXI.Sprite.prototype);
 Explorer.prototype.move = function() {
   this.x += this.vx;
   this.y += this.vy;
+  if (ice) {
+    applyFriction(explorer, 0.05);
+  }
   contain(this, {x: 28, y: 10, width: 488, height: 480});
+  explorer.hit = false;
 };
