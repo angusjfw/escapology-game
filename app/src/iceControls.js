@@ -1,4 +1,4 @@
-function setUpControls(sprite) {
+function setUpIceControls(sprite) {
   var left = keyboard(37),
     up = keyboard(38),
     right = keyboard(39),

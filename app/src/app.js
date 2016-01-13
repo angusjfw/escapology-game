@@ -5,38 +5,65 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   loader
     .add(["images/treasureHunter.json"])
+    .add(["images/arrow.png"])
     .load(setup);
 
-  var state, gameScene, gameOverScene, id;
-  var dungeon, door, explorer, treasure, blob, healthBar, message;
+  var state, level, gameScene, newLevelScene, gameOverScene, id;
+  var maxLevel = 3;
+  var font = {font: "64px Futura", fill: "white"};
+
+  var dungeon, door, explorer, treasure, blob, healthBar, endMessage, levelMessage, arrow;
   var blobs = [],
       numberOfBlobs = 6,
       blobSpacing = 48,
       blobXOffset = 150,
       blobSpeed = 2;
+      arrowSpeed = 2;
 
   function setup() {
     gameScene = new Container();
     stage.addChild(gameScene);
     setUpSprites(gameScene);
     setUpControls(explorer);
+    level = 1;
     state = play;
     gameLoop();
   }
 
   function gameLoop(){
     requestAnimationFrame(gameLoop);
+    console.log(state);
     state();
     renderer.render(stage);
   }
 
   function play() {
     explorer.move();
+    explorer.hit = false;
+    moveArrowsAndTestHit();
     moveBlobsAndTestHit();
     reactToHit();
     carryTreasure();
     checkLoss();
     checkWin();
+  }
+
+  function level_setup() {
+    levelMessage.text = "Level " + level + "!";
+    gameScene.visible = false;
+    newLevelScene.visible = true;
+
+    setTimeout(function() {
+      resetTreasure();
+      if (level === 2) {
+        //make it harder
+      }
+
+      newLevelScene.visible = false;
+      gameScene.visible = true;
+
+      state = play;
+    }, 800);
   }
 
   function end() {
@@ -45,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function moveBlobsAndTestHit() {
-    explorer.hit = false;
+
     blobs.forEach(function(blob) {
       blob.move();
       if (hitTestRectangle(explorer, blob)) {
@@ -54,10 +81,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
    });
   }
 
+  function moveArrowsAndTestHit() {
+
+      arrow.move();
+      if (hitTestRectangle(explorer, arrow)) {
+        explorer.hit = true;
+
+   }
+  }
+
   function reactToHit() {
     if(explorer.hit) {
       explorer.alpha = 0.5;
-      healthBar.outer.width -= 1;
+      healthBar.outerBar.width -= 1;
     } else {
       explorer.alpha = 1;
     }
@@ -72,20 +108,26 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function checkWin() {
     if (hitTestRectangle(treasure, door)) {
-      state = end;
-      message.text = "You won!";
+      if (level == maxLevel) {
+        state = end;
+        endMessage.text = "You won!";
+      } else {
+        level += 1;
+        state = level_setup;
+      }
     }
   }
 
   function checkLoss() {
-    if (healthBar.outer.width < 0) {
+    if (healthBar.outerBar.width < 0) {
       state = end;
-      message.text = "You lost!";
+      endMessage.text = "You lost!";
     }
   }
 
   function setUpSprites(gameScene) {
     id = resources["images/treasureHunter.json"].textures;
+
 
     dungeon = new Dungeon(id["dungeon.png"]);
     gameScene.addChild(dungeon);
@@ -104,6 +146,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     treasure.y = stage.height / 2 - treasure.height / 2;
     gameScene.addChild(treasure);
 
+    arrow = new Arrow(resources["images/arrow.png"].texture);
+    arrow.width = 40;
+    arrow.height = 40;
+    arrow.rotation = 1.6;
+    arrow.position.set(40, 40);
+    arrow.vx = arrowSpeed;
+    gameScene.addChild(arrow);
+
     for (var i = 0; i < numberOfBlobs; i++) {
       blob = new Blob(id["blob.png"]);
       blob.x = blobSpacing * i + blobXOffset;
@@ -113,30 +163,31 @@ document.addEventListener("DOMContentLoaded", function(event) {
       gameScene.addChild(blob);
     }
 
-    healthBar = new Container();
+    healthBar = new HealthBar();
     healthBar.position.set(stage.width - 170, 6);
     gameScene.addChild(healthBar);
-    var innerBar = new Graphics();
-    innerBar.beginFill(0x000000);
-    innerBar.drawRect(0, 0, 128, 8);
-    innerBar.endFill();
-    healthBar.addChild(innerBar);
-    var outerBar = new Graphics();
-    outerBar.beginFill(0xFF3300);
-    outerBar.drawRect(0, 0, 128, 8);
-    outerBar.endFill();
-    healthBar.addChild(outerBar);
-    healthBar.outer = outerBar;
+    healthBar.addChild(healthBar.innerBar);
+    healthBar.addChild(healthBar.outerBar);
 
     gameOverScene = new Container();
     stage.addChild(gameOverScene);
     gameOverScene.visible = false;
-    message = new Text(
-        "The End!",
-        {font: "64px Futura", fill: "white"}
-        );
-    message.x = 120;
-    message.y = stage.height / 2 - 32;
-    gameOverScene.addChild(message);
+    endMessage = new Text("The End!", font);
+    endMessage.x = 120;
+    endMessage.y = stage.height / 2 - 32;
+    gameOverScene.addChild(endMessage);
+
+    newLevelScene = new Container();
+    stage.addChild(newLevelScene);
+    newLevelScene.visible = false;
+    levelMessage = new Text("Level " + level + "!", font);
+    levelMessage.x = 120;
+    levelMessage.y = stage.heigh / 2 - 32;
+    newLevelScene.addChild(levelMessage);
+  }
+
+  function resetTreasure() {
+    treasure.x = stage.width - treasure.width - 48;
+    treasure.y = stage.height / 2 - treasure.height / 2;
   }
 });
