@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function gameLoop(){
     requestAnimationFrame(gameLoop);
-    console.log(state);
     state();
     renderer.render(stage);
   }
@@ -80,7 +79,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function reactToHit() {
     if(explorer.hit) {
       explorer.alpha = 0.5;
-      // healthBar.outer.width -= 1;
       healthBar.outerBar.width -= 1;
     } else {
       explorer.alpha = 1;
