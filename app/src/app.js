@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function gameLoop(){
     requestAnimationFrame(gameLoop);
-    console.log(state);
     state();
     renderer.render(stage);
   }

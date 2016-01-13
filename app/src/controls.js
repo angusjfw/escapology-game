@@ -8,6 +8,7 @@ function setUpControls(sprite) {
     sprite.vx = -5;
     sprite.vy = 0;
   };
+  
   left.release = function() {
     if (!right.isDown && sprite.vy === 0) {
       sprite.vx = 0;
@@ -18,6 +19,7 @@ function setUpControls(sprite) {
     sprite.vy = -5;
     sprite.vx = 0;
   };
+
   up.release = function() {
     if (!down.isDown && sprite.vx === 0) {
       sprite.vy = 0;
@@ -28,6 +30,7 @@ function setUpControls(sprite) {
     sprite.vx = 5;
     sprite.vy = 0;
   };
+
   right.release = function() {
     if (!left.isDown && sprite.vy === 0) {
       sprite.vx = 0;
@@ -38,6 +41,7 @@ function setUpControls(sprite) {
     sprite.vy = 5;
     sprite.vx = 0;
   };
+
   down.release = function() {
     if (!up.isDown && sprite.vx === 0) {
       sprite.vy = 0;
