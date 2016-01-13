@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
       if (level === 2) {
         //make it harder
       }
-      
+
       newLevelScene.visible = false;
       gameScene.visible = true;
 
@@ -80,7 +80,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function reactToHit() {
     if(explorer.hit) {
       explorer.alpha = 0.5;
-      // healthBar.outer.width -= 1;
       healthBar.outerBar.width -= 1;
     } else {
       explorer.alpha = 1;
@@ -107,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function checkLoss() {
-    if (healthBar.outer.width < 0) {
+    if (healthBar.outerBar.width < 0) {
       state = end;
       endMessage.text = "You lost!";
     }
@@ -170,4 +169,3 @@ document.addEventListener("DOMContentLoaded", function(event) {
     treasure.y = stage.height / 2 - treasure.height / 2;
   }
 });
-
