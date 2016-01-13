@@ -113,14 +113,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
       gameScene.addChild(blob);
     }
 
-    healthBar = new Container();
+    healthBar = new HealthBar();
     healthBar.position.set(stage.width - 170, 6);
     gameScene.addChild(healthBar);
+
     var innerBar = new Graphics();
     innerBar.beginFill(0x000000);
     innerBar.drawRect(0, 0, 128, 8);
     innerBar.endFill();
     healthBar.addChild(innerBar);
+
     var outerBar = new Graphics();
     outerBar.beginFill(0xFF3300);
     outerBar.drawRect(0, 0, 128, 8);
