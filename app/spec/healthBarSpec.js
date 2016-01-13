@@ -10,5 +10,13 @@ describe("HealthBar container", function() {
       expect(healthBar.x).toEqual(0);
       expect(healthBar.y).toEqual(0);
     });
+
+    it("contains an innerBar", function() {
+      expect(healthBar.innerBar).toBeDefined();
+    });
+
+    it("contains an outerBar", function() {
+      expect(healthBar.outerBar).toBeDefined();
+    });
   });
 });
