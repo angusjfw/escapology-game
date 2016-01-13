@@ -7,5 +7,4 @@ Arrow.prototype = Object.create(PIXI.Sprite.prototype);
 
 Arrow.prototype.move = function() {
   this.x += this.vx;
-
 };
