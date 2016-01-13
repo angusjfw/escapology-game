@@ -80,7 +80,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function reactToHit() {
     if(explorer.hit) {
       explorer.alpha = 0.5;
-      healthBar.outer.width -= 1;
+      // healthBar.outer.width -= 1;
+      healthBar.outerBar.width -= 1;
     } else {
       explorer.alpha = 1;
     }
@@ -144,19 +145,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     healthBar = new HealthBar();
     healthBar.position.set(stage.width - 170, 6);
     gameScene.addChild(healthBar);
-
-    var innerBar = new Graphics();
-    innerBar.beginFill(0x000000);
-    innerBar.drawRect(0, 0, 128, 8);
-    innerBar.endFill();
-    healthBar.addChild(innerBar);
-
-    var outerBar = new Graphics();
-    outerBar.beginFill(0xFF3300);
-    outerBar.drawRect(0, 0, 128, 8);
-    outerBar.endFill();
-    healthBar.addChild(outerBar);
-    healthBar.outer = outerBar;
+    healthBar.addChild(healthBar.innerBar);
+    healthBar.addChild(healthBar.outerBar);
 
     gameOverScene = new Container();
     stage.addChild(gameOverScene);
