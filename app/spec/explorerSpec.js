@@ -20,4 +20,10 @@ describe("Explorer sprite", function() {
       expect(explorer.hit).toBe(false);
     });
   });
+
+  xit("is able to move", function() {
+    explorer.vx = 1;
+    explorer.move();
+    expect(explorer.x).toEqual(1);
+  });
 });
