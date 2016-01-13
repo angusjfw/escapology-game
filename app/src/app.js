@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
       blobSpacing = 48,
       blobXOffset = 150,
       blobSpeed = 2;
-      arrowSpeed = 2;
+      arrowSpeed = 1;
 
   function setup() {
     gameScene = new Container();
@@ -54,8 +54,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     setTimeout(function() {
       resetTreasure();
-      if (level === 2) {
-        //make it harder
+
+      switch (level) {
+        case 2:
+          //add arrow
+        case 3:
+          //setUpIceControls(explorer);
       }
 
       newLevelScene.visible = false;
@@ -124,7 +128,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function setUpSprites(gameScene) {
     id = resources["images/treasureHunter.json"].textures;
 
-
     dungeon = new Dungeon(id["dungeon.png"]);
     gameScene.addChild(dungeon);
 
@@ -143,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     gameScene.addChild(treasure);
 
     arrow = new Arrow(resources["images/arrow.png"].texture);
-    arrow.width = 40;
+    arrow.width = 20;
     arrow.height = 40;
     arrow.rotation = 1.6;
     arrow.position.set(40, 40);
