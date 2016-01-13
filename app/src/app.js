@@ -9,10 +9,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
     .load(setup);
 
   var state, level, gameScene, newLevelScene, gameOverScene, id;
+  var endMessage, levelMessage;  
   var maxLevel = 3;
   var font = {font: "64px Futura", fill: "white"};
 
-  var dungeon, door, explorer, treasure, blob, healthBar, endMessage, levelMessage, arrow;
+  var dungeon, door, explorer, treasure, blob, arrow, healthBar;
+  var arrows = [];
   var blobs = [],
       numberOfBlobs = 6,
       blobSpacing = 48,
@@ -31,12 +33,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function gameLoop(){
-    requestAnimationFrame(gameLoop);
-    state();
     renderer.render(stage);
+    state(function() {
+      requestAnimationFrame(gameLoop);
+    });
   }
 
-  function play() {
+  function play(cb) {
     explorer.move();
     explorer.hit = false;
     moveArrowsAndTestHit();
@@ -45,33 +48,39 @@ document.addEventListener("DOMContentLoaded", function(event) {
     carryTreasure();
     checkLoss();
     checkWin();
+    cb();
   }
 
-  function level_setup() {
+  function level_setup(cb) {
+    console.log('new level');
     levelMessage.text = "Level " + level + "!";
     gameScene.visible = false;
     newLevelScene.visible = true;
+    renderer.render(stage);
 
     setTimeout(function() {
-      resetTreasure();
-
       switch (level) {
         case 2:
-          //add arrow
+          createArrow(40, 40);
+          createArrow(40, 80);
+          break;
         case 3:
           //setUpIceControls(explorer);
+          break;
       }
 
       newLevelScene.visible = false;
       gameScene.visible = true;
-
       state = play;
+      resetTreasure();
+      cb();
     }, 800);
   }
 
-  function end() {
+  function end(cb) {
     gameScene.visible = false;
     gameOverScene.visible = true;
+    cb();
   }
 
   function moveBlobsAndTestHit() {
@@ -84,10 +93,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function moveArrowsAndTestHit() {
-    arrow.move();
-    if (hitTestRectangle(explorer, arrow)) {
-      explorer.hit = true;
-    }
+    arrows.forEach(function(arrow) {
+      arrow.move();
+      if (hitTestRectangle(explorer, arrow)) {
+        explorer.hit = true;
+      }
+    });
   }
 
   function reactToHit() {
@@ -145,19 +156,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     treasure.y = stage.height / 2 - treasure.height / 2;
     gameScene.addChild(treasure);
 
-    arrow = new Arrow(resources["images/arrow.png"].texture);
-    arrow.width = 20;
-    arrow.height = 40;
-    arrow.rotation = 1.6;
-    arrow.position.set(40, 40);
-    arrow.vx = arrowSpeed;
-    gameScene.addChild(arrow);
-
     for (var i = 0; i < numberOfBlobs; i++) {
-      blob = new Blob(id["blob.png"]);
-      blob.x = blobSpacing * i + blobXOffset;
-      blob.y = randomInt(0, stage.height - blob.height);
-      blob.vy = blobSpeed * (i % 2 === 0) ? 1:-1;
+      createBlob(i);
       blobs.push(blob);
       gameScene.addChild(blob);
     }
@@ -188,5 +188,23 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function resetTreasure() {
     treasure.x = stage.width - treasure.width - 48;
     treasure.y = stage.height / 2 - treasure.height / 2;
+  }
+
+  function createArrow(x, y) {
+    arrow = new Arrow(resources["images/arrow.png"].texture);
+    arrow.width = 20;
+    arrow.height = 40;
+    arrow.rotation = 1.6;
+    arrow.position.set(x, y);
+    arrow.vx = arrowSpeed;
+    arrows.push(arrow);
+    gameScene.addChild(arrow);
+  }
+
+  function createBlob(i) {
+    blob = new Blob(id["blob.png"]);
+    blob.x = blobSpacing * i + blobXOffset;
+    blob.y = randomInt(0, stage.height - blob.height);
+    blob.vy = blobSpeed * (i % 2 === 0) ? 1:-1;
   }
 });
