@@ -7,8 +7,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     .add(["images/treasureHunter.json"])
     .load(setup);
 
-  var state, gameScene, gameOverScene, id;
-  var dungeon, door, explorer, treasure, blob, healthBar, message;
+  var state, level, gameScene, newLevelScene, gameOverScene, id;
+  var maxLevel = 3;
+  var font = {font: "64px Futura", fill: "white"};
+
+  var dungeon, door, explorer, treasure, blob, healthBar, endMessage, levelMessage;
   var blobs = [],
       numberOfBlobs = 6,
       blobSpacing = 48,
@@ -20,12 +23,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     stage.addChild(gameScene);
     setUpSprites(gameScene);
     setUpControls(explorer);
+    level = 1;
     state = play;
     gameLoop();
   }
 
   function gameLoop(){
     requestAnimationFrame(gameLoop);
+    console.log(state);
     state();
     renderer.render(stage);
   }
@@ -37,6 +42,24 @@ document.addEventListener("DOMContentLoaded", function(event) {
     carryTreasure();
     checkLoss();
     checkWin();
+  }
+
+  function level_setup() {
+    levelMessage.text = "Level " + level + "!";
+    gameScene.visible = false;
+    newLevelScene.visible = true;
+
+    setTimeout(function() {
+      resetTreasure();
+      if (level === 2) {
+        //make it harder
+      }
+      
+      newLevelScene.visible = false;
+      gameScene.visible = true;
+
+      state = play;
+    }, 800);
   }
 
   function end() {
@@ -72,15 +95,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function checkWin() {
     if (hitTestRectangle(treasure, door)) {
-      state = end;
-      message.text = "You won!";
+      if (level == maxLevel) {
+        state = end;
+        endMessage.text = "You won!";
+      } else {
+        level += 1;
+        state = level_setup;
+      }
     }
   }
 
   function checkLoss() {
     if (healthBar.outer.width < 0) {
       state = end;
-      message.text = "You lost!";
+      endMessage.text = "You lost!";
     }
   }
 
@@ -131,12 +159,23 @@ document.addEventListener("DOMContentLoaded", function(event) {
     gameOverScene = new Container();
     stage.addChild(gameOverScene);
     gameOverScene.visible = false;
-    message = new Text(
-        "The End!",
-        {font: "64px Futura", fill: "white"}
-        );
-    message.x = 120;
-    message.y = stage.height / 2 - 32;
-    gameOverScene.addChild(message);
+    endMessage = new Text("The End!", font);
+    endMessage.x = 120;
+    endMessage.y = stage.height / 2 - 32;
+    gameOverScene.addChild(endMessage);
+
+    newLevelScene = new Container();
+    stage.addChild(newLevelScene);
+    newLevelScene.visible = false;
+    levelMessage = new Text("Level " + level + "!", font);
+    levelMessage.x = 120;
+    levelMessage.y = stage.heigh / 2 - 32;
+    newLevelScene.addChild(levelMessage);
+  }
+
+  function resetTreasure() {
+    treasure.x = stage.width - treasure.width - 48;
+    treasure.y = stage.height / 2 - treasure.height / 2;
   }
 });
+
