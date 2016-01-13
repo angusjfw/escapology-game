@@ -1,6 +1,5 @@
 var state, level, gameScene, newLevelScene, gameOverScene;
 var maxLevel = 3;
-var friction = false;
 var ice = false;
 
 var endMessage, levelMessage;  
@@ -45,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function play(cb) {
     explorer.move();
-    if (friction) {
+    if (ice) {
       applyFriction(explorer, 0.05);
     }
     explorer.hit = false;
@@ -81,7 +80,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
           clearInterval(arrowMaker);
           arrows = clearEnemies(arrows);
           icyDungeon();
-          friction = true;
           ice = true;
           break;
       }

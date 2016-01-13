@@ -11,7 +11,7 @@ function applyFriction(sprite, force) {
     sprite.vy -= force;
   }
 
-  if (sprite.vx > 0) {
+  if (sprite.vy < 0) {
     sprite.vy += force;
   }
 }
