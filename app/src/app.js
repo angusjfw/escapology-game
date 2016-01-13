@@ -63,10 +63,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     setTimeout(function() {
       switch (level) {
         case 2:
+        createArrowWave();
         setInterval(function(){
-          for (i = 0; i < 5; i++) {
-          createArrow(20, 60+(i*100));
-          }
+          createArrowWave();
         },2500);
           break;
         case 3:
@@ -80,6 +79,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
       resetTreasure();
       cb();
     }, 800);
+  }
+
+  function createArrowWave(){
+    for (i = 0; i < 5; i++) {
+      createArrow(20, 60+(i*100));
+    }
   }
 
   function end(cb) {
