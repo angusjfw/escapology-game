@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     gameScene = new Container();
     stage.addChild(gameScene);
     setUpSprites(gameScene);
-    setUpControls();
+    setUpControls(explorer);
     state = play;
     gameLoop();
   }
@@ -152,52 +152,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     message.x = 120;
     message.y = stage.height / 2 - 32;
     gameOverScene.addChild(message);
-  }
-
-  function setUpControls() {
-    var left = keyboard(37),
-    up = keyboard(38),
-    right = keyboard(39),
-    down = keyboard(40);
-
-    left.press = function() {
-      explorer.vx = -5;
-      explorer.vy = 0;
-    };
-    left.release = function() {
-      if (!right.isDown && explorer.vy === 0) {
-        explorer.vx = 0;
-      }
-    };
-
-    up.press = function() {
-      explorer.vy = -5;
-      explorer.vx = 0;
-    };
-    up.release = function() {
-      if (!down.isDown && explorer.vx === 0) {
-        explorer.vy = 0;
-      }
-    };
-
-    right.press = function() {
-      explorer.vx = 5;
-      explorer.vy = 0;
-    };
-    right.release = function() {
-      if (!left.isDown && explorer.vy === 0) {
-        explorer.vx = 0;
-      }
-    };
-
-    down.press = function() {
-      explorer.vy = 5;
-      explorer.vx = 0;
-    };
-    down.release = function() {
-      if (!up.isDown && explorer.vx === 0) {
-        explorer.vy = 0;
-      }
-    };
   }
 });
