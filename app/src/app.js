@@ -71,22 +71,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function moveBlobsAndTestHit() {
-
     blobs.forEach(function(blob) {
       blob.move();
       if (hitTestRectangle(explorer, blob)) {
         explorer.hit = true;
       }
-   });
+    });
   }
 
   function moveArrowsAndTestHit() {
-
-      arrow.move();
-      if (hitTestRectangle(explorer, arrow)) {
-        explorer.hit = true;
-
-   }
+    arrow.move();
+    if (hitTestRectangle(explorer, arrow)) {
+      explorer.hit = true;
+    }
   }
 
   function reactToHit() {
@@ -181,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     newLevelScene.visible = false;
     levelMessage = new Text("Level " + level + "!", font);
     levelMessage.x = 120;
-    levelMessage.y = stage.heigh / 2 - 32;
+    levelMessage.y = stage.height / 2 - 32;
     newLevelScene.addChild(levelMessage);
   }
 
