@@ -7,9 +7,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
     .add(["images/treasureHunter.json"])
     .load(setup);
 
-  var state, message, gameScene, gameOverScene;
-  var dungeon, door, explorer, treasure, healthBar, id;
-  var blobs, blob, spacing, xOffset, xBlob, yBlob, speed, direction;
+  var state, gameScene, gameOverScene, id;
+  var dungeon, door, explorer, treasure, blob, healthBar, message;
+  var blobs = [],
+      numberOfBlobs = 6,
+      blobSpacing = 48,
+      blobXOffset = 150,
+      blobSpeed = 2;
 
   function setup() {
     gameScene = new Container();
@@ -22,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function gameLoop(){
     requestAnimationFrame(gameLoop);
-    state(); //either play() or end()
+    state();
     renderer.render(stage);
   }
 
@@ -43,19 +47,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function moveBlobsAndTestHit() {
     explorer.hit = false;
     blobs.forEach(function(blob) {
-      moveBlob(blob);
+      blob.move();
       if (hitTestRectangle(explorer, blob)) {
         explorer.hit = true;
       }
    });
-  }
-
-  function moveBlob(blob) {
-    blob.y += blob.vy;
-    var blobHitsWall = contain(blob, {x: 28, y: 10, width: 488, height: 480});
-    if (blobHitsWall === "top" || blobHitsWall === "bottom") {
-      blob.vy *= -1;
-    }
   }
 
   function reactToHit() {
@@ -108,21 +104,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     treasure.y = stage.height / 2 - treasure.height / 2;
     gameScene.addChild(treasure);
 
-    numberOfBlobs = 6;
-    spacing = 48;
-    xOffset = 150;
-    speed = 2;
-    direction = 1;
-    blobs = [];
-
     for (var i = 0; i < numberOfBlobs; i++) {
-      blob = new Sprite(id["blob.png"]);
-      xBlob = spacing * i + xOffset;
-      yBlob = randomInt(0, stage.height - blob.height);
-      blob.x = xBlob;
-      blob.y = yBlob;
-      blob.vy = speed * direction;
-      direction *= -1;
+      blob = new Blob(id["blob.png"]);
+      blob.x = blobSpacing * i + blobXOffset;
+      blob.y = randomInt(0, stage.height - blob.height);
+      blob.vy = blobSpeed * (i % 2 === 0) ? 1:-1;
       blobs.push(blob);
       gameScene.addChild(blob);
     }
