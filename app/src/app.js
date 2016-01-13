@@ -9,12 +9,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
     .load(setup);
 
   var state, level, gameScene, newLevelScene, gameOverScene, id;
-  var endMessage, levelMessage;  
+  var endMessage, levelMessage;
   var maxLevel = 3;
   var font = {font: "64px Futura", fill: "white"};
 
   var dungeon, door, explorer, treasure, blob, arrow, healthBar;
   var arrows = [];
+  var i = 1;
   var blobs = [],
       numberOfBlobs = 6,
       blobSpacing = 48,
@@ -34,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function gameLoop(){
     renderer.render(stage);
+    i += 1;
     state(function() {
       requestAnimationFrame(gameLoop);
     });
@@ -61,8 +63,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     setTimeout(function() {
       switch (level) {
         case 2:
-          createArrow(40, 40);
-          createArrow(40, 80);
+        setInterval(function(){
+          for (i = 0; i < 5; i++) {
+          createArrow(20, 60+(i*100));
+          }
+        },2500);
           break;
         case 3:
           //setUpIceControls(explorer);
