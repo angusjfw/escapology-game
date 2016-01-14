@@ -9,7 +9,7 @@ Hole.prototype = Object.create(PIXI.Sprite.prototype);
 
 Hole.prototype.action = function() {
   if (hitTestRectangle(explorer, this.hitbox)) {
-    healthBar.damage(10);
+    healthBar.damage(20);
     this.switchScene();
     explorer.x = this.x + 30;
     explorer.y = this.y + 30;
@@ -20,6 +20,7 @@ Hole.prototype.switchScene = function(){
   gameScene.removeChild(treasure);
   hiddenTreasure = treasure;
   treasure = new Treasure();
+  gameScene.removeChild(door);
   holes.forEach(function(hole) {
     gameScene.removeChild(hole);
   });

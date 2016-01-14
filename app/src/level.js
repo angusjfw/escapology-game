@@ -88,6 +88,6 @@ Level.prototype.createArrow = function(x, y) {
 
 Level.prototype.createArrowWave = function(number){
   for (var i = 0; i < number; i++) {
-    this.createArrow(20, 60+(i*100));
+    this.createArrow(20, 46+(i*100));
   }
 };

@@ -1,7 +1,7 @@
 var state, level, thisLevel, thisLevelSetup, gameScene, id;
 var newLevelScene, gameOverScene, levelMessage, endMessage;
 var newLevelDelay = 800;
-var level = 1;
+var level = 4;
 var maxLevel = 6;
 var font = {font: "64px Futura", fill: "white"};
 var stageSize = [512, 512];

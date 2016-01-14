@@ -18,17 +18,17 @@ level2.setUp = function(){
 level3 = new Level();
 level3.setUp = function() {
   level3.dungeon = "iceDungeon";
-  level3.numberBlobs = 4;
+  level3.numberBlobs = 5;
   level3.blobSpacing = 60;
-  level3.blobXOffset = 150;
+  level3.blobXOffset = 130;
   level3.populate();
 };
 
 level4 = new Level();
 level4.setUp = function() {
   level4.dungeon = "iceDungeon";
-  level4.holePositions = [[55, 260], [ 240, 45], [330, 330]];
-  level4.holeSizes = [[180, 180], [130, 130], [100, 100]];
+  level4.holePositions = [[55, 250], [ 240, 45], [330, 330]];
+  level4.holeSizes = [[200, 200], [130, 130], [100, 100]];
   level4.populate();
 };
 

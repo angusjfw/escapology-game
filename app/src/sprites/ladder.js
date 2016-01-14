@@ -13,10 +13,11 @@ Ladder.prototype.action = function() {
     gameScene.removeChild(dungeon);
     holes = hiddenHoles;
     holes.forEach(function(hole) {
-      gameScene.addChild(hole);
+      gameScene.addChildAt(hole, 2);
     });
     treasure = hiddenTreasure;
     gameScene.addChild(treasure);
+    gameScene.addChild(door);
     gameScene.removeChild(ladder);
     gameScene.removeChild(explorer);
     gameScene.addChild(explorer);
