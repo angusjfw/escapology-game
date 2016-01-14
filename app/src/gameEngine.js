@@ -13,10 +13,6 @@ function applyFriction(sprite, force) {
   }
 }
 
-function currentLevel() {
-  return window["level" + level];
-}
-
 function contain(sprite, container) {
   var collision;
   if (sprite.x < container.x) {
@@ -107,6 +103,11 @@ function keyboard(keyCode) {
       "keyup", key.upHandler.bind(key), false
       );
   return key;
+}
+
+
+function currentLevel() {
+  return window["level" + level];
 }
 
 function randomInt(min, max) {

@@ -54,3 +54,12 @@ level6.setUp = function() {
   level6.holeSizes = [[150, 150]];
   level6.populate();
 };
+
+level7 = new Level();
+level7.setUp = function() {
+  level7.dungeon = "iceDungeon";
+  level7.explorerFriction = 0.08;
+  level7.holePositions = [[35, 220], [65, 70], [330, 32], [230,280], [165, 115], [200, 425], [330, 330], [335, 165]];
+  level7.holeSizes = [[100, 100], [28, 28], [50, 50], [32, 32], [66, 66], [47, 47], [80, 80], [70, 70]];
+  level7.populate();
+};
