@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     dangerTypes.forEach(function(dangerType) {
       dangerType.forEach(function(danger) {
         danger.action();
-        if (hitTestRectangle(explorer, danger)) {
+        if (hitTestRectangle(explorer, danger) && !(danger instanceof Hole)) {
           explorer.hit = true;
         }
       });

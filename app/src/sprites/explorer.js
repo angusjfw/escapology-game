@@ -13,7 +13,6 @@ Explorer.prototype = Object.create(PIXI.Sprite.prototype);
 Explorer.prototype.move = function() {
   this.x += this.vx;
   this.y += this.vy;
-  console.log(currentLevel().dungeon.isIcy);
   if (currentLevel().dungeon.isIcy) {
     applyFriction(explorer, 0.05);
   }

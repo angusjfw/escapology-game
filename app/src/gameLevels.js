@@ -37,7 +37,7 @@ level5.setUp = function() {
   level5.dungeon = "dungeon";
   level5.numberBlobs = 7;
   level5.numberArrows = 5;
-  level5.arrowDelay = 1500;
+  level5.arrowDelay = 1800;
   level5.populate();
 };
 

@@ -2,15 +2,12 @@ function applyFriction(sprite, force) {
   if (sprite.vx > 0) {
     sprite.vx -= force;
   }
-
   if (sprite.vx < 0) {
     sprite.vx += force;
   }
-
   if (sprite.vy > 0) {
     sprite.vy -= force;
   }
-
   if (sprite.vy < 0) {
     sprite.vy += force;
   }
@@ -79,7 +76,7 @@ function hitTestRectangle(r1, r2) {
   }
   return hit;
 }
-
+  
 function keyboard(keyCode) {
   var key = {};
   key.code = keyCode;

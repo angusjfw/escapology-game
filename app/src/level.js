@@ -33,7 +33,6 @@ Level.prototype.populate = function() {
   this.dungeon = window[this.dungeon];
   this.gameScene.addChild(this.dungeon);
   this.gameScene.addChild(door);
-  this.gameScene.addChild(explorer);
   this.gameScene.addChild(treasure);
   this.gameScene.addChild(healthBar);
   this.createHoles(this.holePositions);
@@ -44,6 +43,7 @@ Level.prototype.populate = function() {
   arrowMaker = setInterval(function() {
     that.createArrowWave(that.numberArrows);
   }, this.arrowDelay);
+  this.gameScene.addChild(explorer);
 };
 
 Level.prototype.createHoles = function(positions){
@@ -52,6 +52,10 @@ Level.prototype.createHoles = function(positions){
     hole.position.set(positions[i][0], positions[i][1]);
     hole.width = this.holeSizes[i][0];
     hole.height = this.holeSizes[i][1];
+    hole.hitbox.x = hole.x + (hole.width * 0.17);
+    hole.hitbox.y = hole.y + (hole.height * 0.17);
+    hole.hitbox.width = hole.width * 0.66;
+    hole.hitbox.height = hole.height * 0.66;
     holes.push(hole);
     this.gameScene.addChild(hole);
   }

@@ -6,7 +6,6 @@ function setUpControls(sprite) {
 
   left.press = function() {
     sprite.vx = -5;
-    console.log(currentLevel().dungeon.isIcy);
     if (!currentLevel().dungeon.isIcy) {
       sprite.vy = 0;
     }

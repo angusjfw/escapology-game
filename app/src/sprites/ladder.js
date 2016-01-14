@@ -18,6 +18,8 @@ Ladder.prototype.action = function() {
     treasure = hiddenTreasure;
     gameScene.addChild(treasure);
     gameScene.removeChild(ladder);
+    gameScene.removeChild(explorer);
+    gameScene.addChild(explorer);
     ladder = undefined;
   }
 };

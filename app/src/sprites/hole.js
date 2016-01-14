@@ -1,16 +1,18 @@
 function Hole(texture) {
   PIXI.Sprite.call(this, texture);
+  this.hitbox = new PIXI.Sprite();
+  this.addChild(this.hitbox);
 }
 
 Hole.constructor = Hole;
 Hole.prototype = Object.create(PIXI.Sprite.prototype);
 
 Hole.prototype.action = function() {
-  if (hitTestRectangle(explorer, this)) {
+  if (hitTestRectangle(explorer, this.hitbox)) {
     healthBar.outerBar.width -= 10;
     this.switchScene();
-    explorer.x = this.x + 50;
-    explorer.y = this.y + 50;
+    explorer.x = this.x + 30;
+    explorer.y = this.y + 30;
   }
 };
 
