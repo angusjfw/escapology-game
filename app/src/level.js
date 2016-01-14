@@ -1,10 +1,10 @@
 function Level() {
   this.gameScene = new Container();
-  this.doorPosition = [0, 0];
-  this.explorerX = 0;
+  this.doorPosition = [32, 0];
+  this.explorerX = 32;
   this.explorerY = 0;
-  this.treasureX = 0;
-  this.treasureY = 0;
+  this.treasureX = 436;
+  this.treasureY = 244;
   this.numberBlobs = 0;
   this.blobSpacing = 0;
   this.blobXOffset = 0;
@@ -28,7 +28,7 @@ Level.prototype.setUp = function() {
   healthBar.addChild(healthBar.innerBar);
   healthBar.addChild(healthBar.outerBar);
   this.gameScene.addChild(this.dungeon);
-  this.gameScene.addChild(this.door);
+  this.gameScene.addChild(door);
   this.gameScene.addChild(explorer);
   this.gameScene.addChild(treasure);
   this.gameScene.addChild(healthBar);

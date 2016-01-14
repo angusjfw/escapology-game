@@ -2,7 +2,7 @@ var state, level, thisLevel, thisLevelSetup, ice, gameScene, newLevelScene, game
 var endMessage, levelMessage;
 var newLevelDelay = 800;
 var level = 1;
-var maxLevel = 3;
+var maxLevel = 4;
 var font = {font: "64px Futura", fill: "white"};
 var stageSize = [512, 512];
 
