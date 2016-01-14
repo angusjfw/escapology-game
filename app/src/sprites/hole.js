@@ -9,7 +9,7 @@ Hole.prototype = Object.create(PIXI.Sprite.prototype);
 
 Hole.prototype.action = function() {
   if (hitTestRectangle(explorer, this.hitbox)) {
-    healthBar.outerBar.width -= 10;
+    healthBar.damage(10);
     this.switchScene();
     explorer.x = this.x + 30;
     explorer.y = this.y + 30;

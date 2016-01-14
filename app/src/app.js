@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function reactToHit() {
     if(explorer.hit) {
       explorer.alpha = 0.5;
-      healthBar.outerBar.width -= 1;
+      healthBar.damage(1);
     } else {
       explorer.alpha = 1;
     }

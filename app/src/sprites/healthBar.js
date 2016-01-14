@@ -16,3 +16,7 @@ function HealthBar() {
 
 HealthBar.constructor = HealthBar;
 HealthBar.prototype = Object.create(PIXI.Container.prototype);
+
+HealthBar.prototype.damage = function(points) {
+  this.outerBar.width -= points;
+};
