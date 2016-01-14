@@ -14,8 +14,6 @@ Hole.prototype.action = function() {
     ladder.width = 30;
     ladder.height = 30;
     gameScene.addChild(ladder);
-    console.log(gameScene);
-    console.log(ladder);
     gameScene.removeChild(treasure);
     hiddenTreasure = treasure;
     treasure = new Sprite();

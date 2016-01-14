@@ -23,7 +23,6 @@ function level3Setup() {
   level3.blobSpacing = 60;
   level3.blobXOffset = 150;
   level3.setUp();
-  console.log(hole);
 }
 
 level4 = new Level();

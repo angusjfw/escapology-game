@@ -1,12 +1,12 @@
-var state, level, thisLevel, thisLevelSetup, ice, gameScene, newLevelScene, gameOverScene;
-var endMessage, levelMessage;
+var state, level, thisLevel, thisLevelSetup, ice, gameScene, id;
+var newLevelScene, gameOverScene, levelMessage, endMessage;
 var newLevelDelay = 800;
 var level = 1;
 var maxLevel = 6;
 var font = {font: "64px Futura", fill: "white"};
 var stageSize = [512, 512];
 
-var id, dungeon, door, explorer, treasure, blob, arrow, hole, ladder, healthBar;
+var dungeon, door, explorer, treasure, blob, arrow, hole, ladder, healthBar;
 var hiddenTreasure;
 var blobs = [];
 var arrows = [];
@@ -54,11 +54,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function levelSetup(cb) {
     clearScene();
-    stage.addChild(newLevelScene);
-    levelMessage.text = "Level " + level + "!";
-    newLevelScene.addChild(levelMessage);
-    newLevelScene.visible = true;
-    renderer.render(stage);
+    showLevelMessage();
 
     setTimeout(function() {
       thisLevel = window["level" + level];
@@ -82,13 +78,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
     cb();
   }
 
+  function showLevelMessage() {
+    stage.addChild(newLevelScene);
+    levelMessage.text = "Level " + level + "!";
+    newLevelScene.addChild(levelMessage);
+    newLevelScene.visible = true;
+    renderer.render(stage);
+  }
+
   function useLadder() {
     if (ladder) {
       ladder.action();
     }
   }
-
-
 
   function moveDangersAndTestHit(dangerTypes) {
     dangerTypes.forEach(function(dangerType) {
