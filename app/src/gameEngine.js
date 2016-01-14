@@ -22,17 +22,14 @@ function contain(sprite, container) {
     sprite.x = container.x;
     collision = "left";
   }
-  //Top
   if (sprite.y < container.y) {
     sprite.y = container.y;
     collision = "top";
   }
-  //Right
   if (sprite.x + sprite.width > container.width) {
     sprite.x = container.width - sprite.width;
     collision = "right";
   }
-  //Bottom
   if (sprite.y + sprite.height > container.height) {
     sprite.y = container.height - sprite.height;
     collision = "bottom";
@@ -86,7 +83,6 @@ function keyboard(keyCode) {
   key.isUp = true;
   key.press = undefined;
   key.release = undefined;
-  //The `downHandler`
   key.downHandler = function(event) {
     if (event.keyCode === key.code) {
       if (key.isUp && key.press) key.press();
@@ -95,7 +91,6 @@ function keyboard(keyCode) {
     }
     event.preventDefault();
   };
-  //The `upHandler`
   key.upHandler = function(event) {
     if (event.keyCode === key.code) {
       if (key.isDown && key.release) key.release();
@@ -104,7 +99,6 @@ function keyboard(keyCode) {
     }
     event.preventDefault();
   };
-  //Attach event listeners
   window.addEventListener(
       "keydown", key.downHandler.bind(key), false
       );

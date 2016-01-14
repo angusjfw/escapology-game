@@ -6,10 +6,12 @@ var maxLevel = 6;
 var font = {font: "64px Futura", fill: "white"};
 var stageSize = [512, 512];
 
-var id, dungeon, door, explorer, treasure, blob, arrow, hole, healthBar;
+var id, dungeon, door, explorer, treasure, blob, arrow, hole, ladder, healthBar;
+var hiddenTreasure;
 var blobs = [];
 var arrows = [];
 var holes = [];
+var hiddenHoles = [];
 
 document.addEventListener("DOMContentLoaded", function(event) {
   var renderer = new autoDetectRenderer(stageSize[0], stageSize[1]);
@@ -21,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     .add(["images/icyDungeon.png"])
     .add(["images/arrow.png"])
     .add(["images/hole.png"])
+    .add(["images/ladder.png"])
     .load(setup);
 
   function setup() {
@@ -40,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function play(cb) {
     explorer.move();
+    useLadder();
     moveDangersAndTestHit([blobs, arrows, holes]);
     reactToHit();
     carryTreasure();
@@ -77,6 +81,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     gameOverScene.visible = true;
     cb();
   }
+
+  function useLadder() {
+    if (ladder) {
+      ladder.action();
+    }
+  }
+
+
 
   function moveDangersAndTestHit(dangerTypes) {
     dangerTypes.forEach(function(dangerType) {

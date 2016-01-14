@@ -40,7 +40,7 @@ function level5Setup() {
   level5.dungeon = dungeon;
   level5.numberBlobs = 7;
   level5.numberArrows = 5;
-  level5.arrowDelay = 1000;
+  level5.arrowDelay = 1500;
   level5.setUp();
 }
 
@@ -52,9 +52,8 @@ function level6Setup() {
   level6.blobSpacing = 60;
   level6.blobXOffset = 150;
   level6.numberArrows = 5;
-  level6.arrowDelay = 1000;
+  level6.arrowDelay = 1500;
   level6.holePositions = [[180, 200]];
   level6.holeSizes = [[150, 150]];
   level6.setUp();
 }
-  

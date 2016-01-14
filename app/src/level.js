@@ -60,7 +60,7 @@ Level.prototype.createBlob = function(i) {
   blob = new Blob(id["blob.png"]);
   blob.x = this.blobSpacing * i + this.blobXOffset;
   blob.y = randomInt(0, stageSize[1] - blob.height);
-  blob.vy = this.blobSpeed * (i % 2 === 0) ? 1:-1;
+  blob.vy = (i % 2 === 0) ? this.blobSpeed:-this.blobSpeed;
   blobs.push(blob);
   this.gameScene.addChild(blob);
 };
