@@ -1,9 +1,10 @@
-var state, level, gameScene, newLevelScene, gameOverScene;
+var state, level, thisLevel, thisLevelSetup, ice, gameScene, newLevelScene, gameOverScene;
 var endMessage, levelMessage;
+var newLevelDelay = 800;
 var level = 1;
 var maxLevel = 3;
-var ice = false;
 var font = {font: "64px Futura", fill: "white"};
+var stageSize = [512, 512];
 
 var id, dungeon, door, explorer, treasure, blob, arrow, healthBar;
 var arrows = [],
@@ -15,7 +16,7 @@ var blobs = [],
     blobSpeed = 2;
 
 document.addEventListener("DOMContentLoaded", function(event) {
-  var renderer = new autoDetectRenderer(512, 512);
+  var renderer = new autoDetectRenderer(stageSize[0], stageSize[1]);
   var stage = new Container();
   document.body.appendChild(renderer.view);
 
@@ -26,11 +27,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     .load(setup);
 
   function setup() {
-    gameScene = new Container();
-    stage.addChild(gameScene);
-    setUpSprites(gameScene);
+    setUpMessages();
+    setUpSprites();
     setUpControls(explorer);
-    state = play;
+    state = levelSetup;
     gameLoop();
   }
 
@@ -43,12 +43,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function play(cb) {
     explorer.move();
-    if (blobs.length !== 0) {
-      moveBlobsAndTestHit();
-    }
-    if (arrows.length !== 0) {
-      moveArrowsAndTestHit();
-    }
+    moveBlobsAndTestHit();
+    moveArrowsAndTestHit();
     reactToHit();
     carryTreasure();
     checkLoss();
@@ -56,38 +52,31 @@ document.addEventListener("DOMContentLoaded", function(event) {
     cb();
   }
 
-  function level_setup(cb) {
+  function levelSetup(cb) {
+    clearScene();
+    stage.addChild(newLevelScene);
     levelMessage.text = "Level " + level + "!";
-    gameScene.visible = false;
+    newLevelScene.addChild(levelMessage);
     newLevelScene.visible = true;
     renderer.render(stage);
 
     setTimeout(function() {
-      switch (level) {
-        case 2:
-        blobs = clearEnemies(blobs);
-        createArrowWave();
-        arrowMaker = setInterval(function(){
-          createArrowWave();
-        },1000);
-          break;
-        case 3:
-          clearInterval(arrowMaker);
-          arrows = clearEnemies(arrows);
-          icyDungeon();
-          ice = true;
-          break;
-      }
+      thisLevel = window["level" + level];
+      thisLevelSetup = window["level" + level + "Setup"];
+      gameScene = thisLevel.gameScene;
+      stage.addChild(gameScene);
+      thisLevelSetup();
 
       newLevelScene.visible = false;
       gameScene.visible = true;
       state = play;
-      resetTreasure();
       cb();
-    }, 800);
+    }, newLevelDelay);
   }
 
   function end(cb) {
+    stage.addChild(gameOverScene);
+    gameOverScene.addChild(endMessage);
     gameScene.visible = false;
     gameOverScene.visible = true;
     cb();
@@ -107,6 +96,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
       arrow.move();
       if (hitTestRectangle(explorer, arrow)) {
         explorer.hit = true;
+
       }
     });
   }
@@ -134,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         endMessage.text = "You won!";
       } else {
         level += 1;
-        state = level_setup;
+        state = levelSetup;
       }
     }
   }
@@ -146,93 +136,32 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   }
 
-  function setUpSprites(gameScene) {
-    id = resources["images/treasureHunter.json"].textures;
-
-    dungeon = new Dungeon(id["dungeon.png"]);
-    gameScene.addChild(dungeon);
-
-    door = new Door(id["door.png"]);
-    door.position.set(32, 0);
-    gameScene.addChild(door);
-
-    explorer = new Explorer(id["explorer.png"]);
-    explorer.x = 68;
-    explorer.y = stage.height / 2 - explorer.height / 2;
-    gameScene.addChild(explorer);
-
-    treasure = new Treasure(id["treasure.png"]);
-    treasure.x = stage.width - treasure.width - 48;
-    treasure.y = stage.height / 2 - treasure.height / 2;
-    gameScene.addChild(treasure);
-
-    for (var i = 0; i < numberOfBlobs; i++) {
-      createBlob(i);
-      blobs.push(blob);
-      gameScene.addChild(blob);
-    }
-
-    healthBar = new HealthBar();
-    healthBar.position.set(stage.width - 170, 6);
-    gameScene.addChild(healthBar);
-    healthBar.addChild(healthBar.innerBar);
-    healthBar.addChild(healthBar.outerBar);
-
+  function setUpMessages() {
     gameOverScene = new Container();
-    stage.addChild(gameOverScene);
-    gameOverScene.visible = false;
     endMessage = new Text("The End!", font);
     endMessage.x = 120;
-    endMessage.y = stage.height / 2 - 32;
-    gameOverScene.addChild(endMessage);
+    endMessage.y = stageSize[1] / 2 - 32;
 
     newLevelScene = new Container();
-    stage.addChild(newLevelScene);
-    newLevelScene.visible = false;
     levelMessage = new Text("Level " + level + "!", font);
     levelMessage.x = 120;
-    levelMessage.y = stage.height / 2 - 32;
-    newLevelScene.addChild(levelMessage);
+    levelMessage.y = stageSize[1] / 2 - 32;
   }
 
-  function resetTreasure() {
-    treasure.x = stage.width - treasure.width - 48;
-    treasure.y = stage.height / 2 - treasure.height / 2;
+  function setUpSprites() {
+    id = resources["images/treasureHunter.json"].textures;
+    iceDungeon = new Dungeon(resources["images/icyDungeon.png"].texture);
+    dungeon = new Dungeon(id["dungeon.png"]);
+    door = new Door(id["door.png"]);
+    explorer = new Explorer(id["explorer.png"]);
+    treasure = new Treasure(id["treasure.png"]);
+    healthBar = new HealthBar();
   }
 
-  function createBlob(i) {
-    blob = new Blob(id["blob.png"]);
-    blob.x = blobSpacing * i + blobXOffset;
-    blob.y = randomInt(0, stage.height - blob.height);
-    blob.vy = blobSpeed * (i % 2 === 0) ? 1:-1;
-  }
-
-  function createArrow(x, y) {
-    arrow = new Arrow(resources["images/arrow.png"].texture);
-    arrow.width = 20;
-    arrow.height = 40;
-    arrow.rotation = 1.6;
-    arrow.position.set(x, y);
-    arrow.vx = arrowSpeed;
-    arrows.push(arrow);
-    gameScene.addChild(arrow);
-  }
-
-  function createArrowWave(){
-    for (var i = 0; i < 5; i++) {
-      createArrow(20, 60+(i*100));
+  function clearScene() {
+    for (var i = stage.children.length - 1; i >= 0; i--) {
+      stage.removeChild(stage.children[i]);
     }
-  }
-
-  function icyDungeon() {
-    dungeon = new Dungeon(resources["images/icyDungeon.png"].texture);
-    gameScene.addChildAt(dungeon, 1);
-  }
-
-  function clearEnemies(type) {
-    type.forEach(function(enemy) {
-      gameScene.removeChild(enemy);
-    });
-    return [];
+    ice = false;
   }
 });
