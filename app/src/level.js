@@ -30,6 +30,7 @@ Level.prototype.populate = function() {
   healthBar.position.set(stageSize[0] - 170, 6);
   healthBar.addChild(healthBar.innerBar);
   healthBar.addChild(healthBar.outerBar);
+  this.dungeon = window[this.dungeon];
   this.gameScene.addChild(this.dungeon);
   this.gameScene.addChild(door);
   this.gameScene.addChild(explorer);
