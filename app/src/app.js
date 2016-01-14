@@ -75,6 +75,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     gameOverScene.addChild(endMessage);
     gameScene.visible = false;
     gameOverScene.visible = true;
+    console.log("ending");
     cb();
   }
 

@@ -8,22 +8,26 @@ Hole.prototype = Object.create(PIXI.Sprite.prototype);
 Hole.prototype.action = function() {
   if (hitTestRectangle(explorer, this)) {
     healthBar.outerBar.width -= 10;
-    gameScene.addChildAt(dungeon, 1);
-    ladder = new Ladder(resources["images/ladder.png"].texture);
-    ladder.position.set(this.x - 25, this.y - 25);
-    ladder.width = 30;
-    ladder.height = 30;
-    gameScene.addChild(ladder);
-    gameScene.removeChild(treasure);
-    hiddenTreasure = treasure;
-    treasure = new Sprite();
-    holes.forEach(function(hole) {
-      gameScene.removeChild(hole);
-    });
-    hiddenHoles = holes;
-    holes = [];
-    ice = false;
+    this.switchScene();
     explorer.x = this.x + 50;
     explorer.y = this.y + 50;
   }
+};
+
+Hole.prototype.switchScene = function(){
+  gameScene.removeChild(treasure);
+  hiddenTreasure = treasure;
+  treasure = new Treasure();
+  holes.forEach(function(hole) {
+    gameScene.removeChild(hole);
+  });
+  hiddenHoles = holes;
+  holes = [];
+  ice = false;
+  gameScene.addChildAt(dungeon, 1);
+  ladder = new Ladder(resources["images/ladder.png"].texture);
+  ladder.position.set(this.x - 25, this.y - 25);
+  ladder.width = 30;
+  ladder.height = 30;
+  gameScene.addChild(ladder);
 };
