@@ -1,9 +1,9 @@
-var state, level, thisLevel, thisLevelSetup, gameScene, id;
+var state, win, level, thisLevel, thisLevelSetup, gameScene, id;
 var newLevelScene, gameOverScene, levelMessage, endMessage;
 var newLevelDelay = 800;
 var level = 1;
 var maxLevel = 7;
-var font = {font: "64px Futura", fill: "white"};
+var font = {font: "64px Futura", fill: "white", align: "center"};
 var stageSize = [512, 512];
 
 var dungeon, door, explorer, treasure, blob, arrow, hole, ladder, healthBar;
@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     carryTreasure();
     checkLoss();
     checkWin();
+    endMessage.text = win ? "You won!":"You lost!";
     cb();
   }
 
@@ -75,6 +76,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
     gameOverScene.addChild(endMessage);
     gameScene.visible = false;
     gameOverScene.visible = true;
+    setTimeout(function() {
+      endMessage.text = "You completed\n" + (win ? level:level-1) + "/" +
+                        maxLevel +"\nlevels!";
+      endMessage.x = stageSize[0] / 2 - 216;
+      endMessage.y = stageSize[1] / 2 - 140;
+    }, 1500);
     cb();
   }
 
@@ -129,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if (hitTestRectangle(treasure, door)) {
       if (level == maxLevel) {
         state = end;
-        endMessage.text = "You won!";
+        win = true;
       } else {
         level += 1;
         state = levelSetup;
@@ -140,20 +147,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function checkLoss() {
     if (healthBar.outerBar.width < 0) {
       state = end;
-      endMessage.text = "You lost!";
+      win = false;
     }
   }
 
   function setUpMessages() {
     gameOverScene = new Container();
     endMessage = new Text("The End!", font);
-    endMessage.x = 120;
-    endMessage.y = stageSize[1] / 2 - 32;
+    endMessage.x = 130;
+    endMessage.y = stageSize[1] / 2 - 70;
 
     newLevelScene = new Container();
     levelMessage = new Text("Level " + level + "!", font);
-    levelMessage.x = 120;
-    levelMessage.y = stageSize[1] / 2 - 32;
+    levelMessage.x = 140;
+    levelMessage.y = stageSize[1] / 2 - 70;
   }
 
   function setUpSprites() {
