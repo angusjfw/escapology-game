@@ -1,5 +1,6 @@
-function Dungeon(texture) {
+function Dungeon(texture, isIcy) {
   PIXI.Sprite.call(this, texture);
+  this.isIcy = isIcy;
 }
 
 Dungeon.constructor = Dungeon;

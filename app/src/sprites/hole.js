@@ -23,10 +23,11 @@ Hole.prototype.switchScene = function(){
   });
   hiddenHoles = holes;
   holes = [];
-  ice = false;
+  hiddenDungeon = currentLevel().dungeon;
+  currentLevel().dungeon = dungeon;
   gameScene.addChildAt(dungeon, 1);
   ladder = new Ladder(resources["images/ladder.png"].texture);
-  ladder.position.set(this.x - 25, this.y - 25);
+  ladder.position.set(this.x - 35, this.y - 30);
   ladder.width = 30;
   ladder.height = 30;
   gameScene.addChild(ladder);

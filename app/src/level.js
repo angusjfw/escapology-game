@@ -18,7 +18,7 @@ function Level() {
 
 var arrowMaker = 0;
 
-Level.prototype.setUp = function() {
+Level.prototype.populate = function() {
   blobs = [];
   arrows = [];
   holes = [];

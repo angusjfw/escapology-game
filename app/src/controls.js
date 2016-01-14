@@ -6,52 +6,53 @@ function setUpControls(sprite) {
 
   left.press = function() {
     sprite.vx = -5;
-    if (!ice) {
+    console.log(currentLevel().dungeon.isIcy);
+    if (!currentLevel().dungeon.isIcy) {
       sprite.vy = 0;
     }
   };
   
   left.release = function() {
-    if (!ice && !right.isDown && sprite.vy === 0) {
+    if (!currentLevel().dungeon.isIcy && !right.isDown && sprite.vy === 0) {
       sprite.vx = 0;
     }
   };
 
   up.press = function() {
     sprite.vy = -5;
-    if (!ice) {
+    if (!currentLevel().dungeon.isIcy) {
       sprite.vx = 0;
     }
   };
 
   up.release = function() {
-    if (!ice && !down.isDown && sprite.vx === 0) {
+    if (!currentLevel().dungeon.isIcy && !down.isDown && sprite.vx === 0) {
       sprite.vy = 0;
     }
   };
 
   right.press = function() {
     sprite.vx = 5;
-    if (!ice) {
+    if (!currentLevel().dungeon.isIcy) {
       sprite.vy = 0;
     }
   };
 
   right.release = function() {
-    if (!ice && !left.isDown && sprite.vy === 0) {
+    if (!currentLevel().dungeon.isIcy && !left.isDown && sprite.vy === 0) {
       sprite.vx = 0;
     }
   };
 
   down.press = function() {
     sprite.vy = 5;
-    if (!ice) {
+    if (!currentLevel().dungeon.isIcy) {
       sprite.vx = 0;
     }
   };
 
   down.release = function() {
-    if (!ice && !up.isDown && sprite.vx === 0) {
+    if (!currentLevel().dungeon.isIcy && !up.isDown && sprite.vx === 0) {
       sprite.vy = 0;
     }
   };

@@ -1,4 +1,4 @@
-var state, level, thisLevel, thisLevelSetup, ice, gameScene, id;
+var state, level, thisLevel, thisLevelSetup, gameScene, id;
 var newLevelScene, gameOverScene, levelMessage, endMessage;
 var newLevelDelay = 800;
 var level = 1;
@@ -7,6 +7,7 @@ var font = {font: "64px Futura", fill: "white"};
 var stageSize = [512, 512];
 
 var dungeon, door, explorer, treasure, blob, arrow, hole, ladder, healthBar;
+var hiddenDungeon;
 var hiddenTreasure;
 var blobs = [];
 var arrows = [];
@@ -57,11 +58,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     showLevelMessage();
 
     setTimeout(function() {
-      thisLevel = window["level" + level];
-      thisLevelSetup = window["level" + level + "Setup"];
+      thisLevel = currentLevel();
       gameScene = thisLevel.gameScene;
       stage.addChild(gameScene);
-      thisLevelSetup();
+      thisLevel.setUp();
 
       newLevelScene.visible = false;
       gameScene.visible = true;
@@ -75,10 +75,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
     gameOverScene.addChild(endMessage);
     gameScene.visible = false;
     gameOverScene.visible = true;
-    console.log("ending");
     cb();
   }
 
+  function clearScene() {
+    for (var i = stage.children.length - 1; i >= 0; i--) {
+      stage.removeChild(stage.children[i]);
+    }
+  }
+  
   function showLevelMessage() {
     stage.addChild(newLevelScene);
     levelMessage.text = "Level " + level + "!";
@@ -153,18 +158,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function setUpSprites() {
     id = resources["images/treasureHunter.json"].textures;
-    iceDungeon = new Dungeon(resources["images/icyDungeon.png"].texture);
-    dungeon = new Dungeon(id["dungeon.png"]);
+    iceDungeon = new Dungeon(resources["images/icyDungeon.png"].texture, true);
+    dungeon = new Dungeon(id["dungeon.png"], false);
     door = new Door(id["door.png"]);
     explorer = new Explorer(id["explorer.png"]);
     treasure = new Treasure(id["treasure.png"]);
     healthBar = new HealthBar();
-  }
-
-  function clearScene() {
-    for (var i = stage.children.length - 1; i >= 0; i--) {
-      stage.removeChild(stage.children[i]);
-    }
-    ice = false;
   }
 });

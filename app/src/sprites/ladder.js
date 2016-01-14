@@ -7,9 +7,9 @@ Ladder.prototype = Object.create(PIXI.Sprite.prototype);
 
 Ladder.prototype.action = function() {
   if (hitTestRectangle(explorer, this)) {
-    ice = true;
-    explorer.x -= 30;
-    explorer.y -= 30;
+    //explorer.x -= 30;
+    //explorer.y -= 30;
+    currentLevel().dungeon = hiddenDungeon;
     gameScene.removeChild(dungeon);
     holes = hiddenHoles;
     holes.forEach(function(hole) {
