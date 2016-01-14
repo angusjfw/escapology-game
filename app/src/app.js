@@ -6,14 +6,10 @@ var maxLevel = 4;
 var font = {font: "64px Futura", fill: "white"};
 var stageSize = [512, 512];
 
-var id, dungeon, door, explorer, treasure, blob, arrow, healthBar;
-var arrows = [],
-    arrowSpeed = 3;
-var blobs = [],
-    numberOfBlobs = 6,
-    blobSpacing = 48,
-    blobXOffset = 150,
-    blobSpeed = 2;
+var id, dungeon, door, explorer, treasure, blob, arrow, hole, healthBar;
+var blobs = [];
+var arrows = [];
+var holes = [];
 
 document.addEventListener("DOMContentLoaded", function(event) {
   var renderer = new autoDetectRenderer(stageSize[0], stageSize[1]);
@@ -22,8 +18,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   loader
     .add(["images/treasureHunter.json"])
-    .add(["images/arrow.png"])
     .add(["images/icyDungeon.png"])
+    .add(["images/arrow.png"])
+    .add(["images/hole.png"])
     .load(setup);
 
   function setup() {
@@ -43,8 +40,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function play(cb) {
     explorer.move();
-    moveBlobsAndTestHit();
-    moveArrowsAndTestHit();
+    moveDangersAndTestHit([blobs, arrows, holes]);
     reactToHit();
     carryTreasure();
     checkLoss();
@@ -82,22 +78,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     cb();
   }
 
-  function moveBlobsAndTestHit() {
-    blobs.forEach(function(blob) {
-      blob.move();
-      if (hitTestRectangle(explorer, blob)) {
-        explorer.hit = true;
-      }
-    });
-  }
-
-  function moveArrowsAndTestHit() {
-    arrows.forEach(function(arrow) {
-      arrow.move();
-      if (hitTestRectangle(explorer, arrow)) {
-        explorer.hit = true;
-
-      }
+  function moveDangersAndTestHit(dangerTypes) {
+    dangerTypes.forEach(function(dangerType) {
+      dangerType.forEach(function(danger) {
+        danger.action();
+        if (hitTestRectangle(explorer, danger)) {
+          explorer.hit = true;
+        }
+      });
     });
   }
 

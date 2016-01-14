@@ -12,6 +12,8 @@ function Level() {
   this.numberArrows = 0;
   this.arrowSpeed = 0;
   this.arrowDelay = 9999;
+  this.holePositions = [];
+  this.holeSizes = [];
 }
 
 var arrowMaker = 0;
@@ -19,6 +21,7 @@ var arrowMaker = 0;
 Level.prototype.setUp = function() {
   blobs = [];
   arrows = [];
+  holes = [];
   door.position.set(this.doorPosition[0], this.doorPosition[1]);
   explorer.x = this.explorerX;
   explorer.y = this.explorerY;  
@@ -32,6 +35,7 @@ Level.prototype.setUp = function() {
   this.gameScene.addChild(explorer);
   this.gameScene.addChild(treasure);
   this.gameScene.addChild(healthBar);
+  this.createHoles(this.holePositions);
   this.createBlobWave(this.numberBlobs);
   clearInterval(arrowMaker);
   this.createArrowWave(this.numberArrows);
@@ -39,6 +43,17 @@ Level.prototype.setUp = function() {
   arrowMaker = setInterval(function() {
     that.createArrowWave(that.numberArrows);
   }, this.arrowDelay);
+};
+
+Level.prototype.createHoles = function(positions){
+  for (var i = 0; i < positions.length; i++) {
+    hole = new Hole(resources["images/hole.png"].texture);
+    hole.position.set(positions[i][0], positions[i][1]);
+    hole.width = this.holeSizes[i][0];
+    hole.height = this.holeSizes[i][1];
+    holes.push(hole);
+    this.gameScene.addChild(hole);
+  }
 };
 
 Level.prototype.createBlob = function(i) {

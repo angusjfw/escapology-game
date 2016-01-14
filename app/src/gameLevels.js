@@ -8,7 +8,6 @@ function level1Setup() {
   level1.blobXOffset = 150;
   level1.blobSpeed = 2;
   level1.setUp();
-  console.log(treasure);
 }
 
 level2 = new Level();
@@ -24,17 +23,19 @@ level3 = new Level();
 function level3Setup() {
   level3.dungeon = iceDungeon;
   ice = true;
+  level3.numberBlobs = 4;
+  level3.blobSpacing = 60;
+  level3.blobXOffset = 150;
+  level3.blobSpeed = 2;
   level3.setUp();
+  console.log(hole);
 }
 
 level4 = new Level();
 function level4Setup() {
   level4.dungeon = iceDungeon;
   ice = true;
-  level4.numberBlobs = 4;
-  level4.blobSpacing = 60;
-  level4.blobXOffset = 150;
-  level4.blobSpeed = 2;
+  level4.holePositions = [[55, 260], [ 240, 45], [330, 330]];
+  level4.holeSizes = [[180, 180], [130, 130], [100, 100]];
   level4.setUp();
 }
-
