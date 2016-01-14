@@ -6,11 +6,11 @@ function Level() {
   this.treasureX = 436;
   this.treasureY = 244;
   this.numberBlobs = 0;
-  this.blobSpacing = 0;
-  this.blobXOffset = 0;
-  this.blobSpeed = 0;
+  this.blobSpacing = 48;
+  this.blobXOffset = 102;
+  this.blobSpeed = 2;
   this.numberArrows = 0;
-  this.arrowSpeed = 0;
+  this.arrowSpeed = 3;
   this.arrowDelay = 9999;
   this.holePositions = [];
   this.holeSizes = [];
