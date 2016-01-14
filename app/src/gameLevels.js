@@ -44,6 +44,7 @@ level5.setUp = function() {
 level6 = new Level();
 level6.setUp = function() {
   level6.dungeon = "iceDungeon";
+  level6.explorerFriction = 0.07;
   level6.numberBlobs = 4;
   level6.blobSpacing = 60;
   level6.blobXOffset = 150;

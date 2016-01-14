@@ -3,6 +3,7 @@ function Level() {
   this.doorPosition = [32, 0];
   this.explorerX = 32;
   this.explorerY = 0;
+  this.explorerFriction = 0.05;
   this.treasureX = 436;
   this.treasureY = 244;
   this.numberBlobs = 0;
@@ -24,7 +25,8 @@ Level.prototype.populate = function() {
   holes = [];
   door.position.set(this.doorPosition[0], this.doorPosition[1]);
   explorer.x = this.explorerX;
-  explorer.y = this.explorerY;  
+  explorer.y = this.explorerY;
+  explorer.friction = this.explorerFriction;
   treasure.x = this.treasureX;
   treasure.y = this.treasureY;
   healthBar.position.set(stageSize[0] - 170, 6);
@@ -52,10 +54,7 @@ Level.prototype.createHoles = function(positions){
     hole.position.set(positions[i][0], positions[i][1]);
     hole.width = this.holeSizes[i][0];
     hole.height = this.holeSizes[i][1];
-    hole.hitbox.x = hole.x + (hole.width * 0.17);
-    hole.hitbox.y = hole.y + (hole.height * 0.17);
-    hole.hitbox.width = hole.width * 0.66;
-    hole.hitbox.height = hole.height * 0.66;
+    hole.positionHitbox();
     holes.push(hole);
     this.gameScene.addChild(hole);
   }

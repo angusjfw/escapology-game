@@ -34,3 +34,10 @@ Hole.prototype.switchScene = function(){
   ladder.height = 30;
   gameScene.addChild(ladder);
 };
+
+Hole.prototype.positionHitbox = function() {
+  this.hitbox.x = this.x + (this.width * 0.17);
+  this.hitbox.y = this.y + (this.height * 0.17);
+  this.hitbox.width = this.width * 0.66;
+  this.hitbox.height = this.height * 0.66;
+};
