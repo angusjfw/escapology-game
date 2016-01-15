@@ -1,5 +1,5 @@
 var state, win, level, thisLevel, thisLevelSetup, gameScene, id;
-var newLevelScene, gameOverScene, levelMessage, endMessage;
+var newLevelScene, gameOverScene, levelMessage, endMessage, replayMessage;
 var newLevelDelay = 800;
 var level = 1;
 var maxLevel = 7;
@@ -77,12 +77,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
     gameScene.visible = false;
     gameOverScene.visible = true;
     setTimeout(function() {
+      gameOverScene.addChild(replayMessage);
       endMessage.text = "You completed\n" + (win ? level:level-1) + "/" +
-                        maxLevel +"\nlevels!";
+                        maxLevel +" levels!";
       endMessage.x = stageSize[0] / 2 - 216;
-      endMessage.y = stageSize[1] / 2 - 140;
+      endMessage.y = stageSize[1] / 2 - 170;
     }, 1500);
     cb();
+  }
+
+  function replay() {
+    document.location.reload();
   }
 
   function clearScene() {
@@ -152,15 +157,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function setUpMessages() {
-    gameOverScene = new Container();
-    endMessage = new Text("The End!", font);
-    endMessage.x = 130;
-    endMessage.y = stageSize[1] / 2 - 70;
-
     newLevelScene = new Container();
     levelMessage = new Text("Level " + level + "!", font);
     levelMessage.x = 140;
     levelMessage.y = stageSize[1] / 2 - 70;
+
+    gameOverScene = new Container();
+    endMessage = new Text("The End!", font);
+    endMessage.x = 130;
+    endMessage.y = stageSize[1] / 2 - 70;
+    replayMessage = new Text("Play again?", font);
+    replayMessage.x = 94;
+    replayMessage.y = 300;
+    replayMessage.interactive = true;
+    replayMessage.on('mousedown', replay);
   }
 
   function setUpSprites() {
