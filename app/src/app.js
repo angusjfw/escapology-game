@@ -56,7 +56,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     clearScene();
     thisLevel = currentLevel();
     gameScene = thisLevel.gameScene;
-    gameScene.visible = true;
     stage.addChild(gameScene);
     thisLevel.setUp();
     showLevelMessage();
@@ -72,12 +71,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function end(cb) {
     stage.addChild(endScene);
     endScene.addChild(endMessage);
+    gameScene.filters = [new PIXI.filters.DotScreenFilter()];
     setTimeout(function() {
       endScene.removeChild(endMessage);
       stage.removeChild(endScene);
       endScene.visible = false;
       stage.addChild(gameOverScene);
-      gameScene.visible = false;
       gameOverScene.visible = true;
       gameOverScene.addChild(replayMessage);
       gameOverScene.addChild(progressMessage);
@@ -98,8 +97,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function controlScenes() {
     gameOverScene.visible = false;
-    gameScene.visible = true;
     endScene.visible = true;
+    gameScene.filters = null;
   }
 
 
@@ -110,6 +109,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
   
   function showLevelMessage() {
+    gameScene.filters = [new PIXI.filters.SmartBlurFilter()];
     stage.addChild(newLevelScene);
     levelMessage.text = "Level " + level + "!";
     newLevelScene.addChild(levelMessage);
