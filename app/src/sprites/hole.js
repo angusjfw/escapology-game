@@ -38,8 +38,8 @@ Hole.prototype.switchScene = function(){
 };
 
 Hole.prototype.positionHitbox = function() {
-  this.hitbox.x = this.x + (this.width * 0.2);
-  this.hitbox.y = this.y + (this.height * 0.2);
-  this.hitbox.width = this.width * 0.6;
-  this.hitbox.height = this.height * 0.6;
+  this.hitbox.x = this.x + (this.width * 0.18);
+  this.hitbox.y = this.y + (this.height * 0.18);
+  this.hitbox.width = this.width * 0.64;
+  this.hitbox.height = this.height * 0.64;
 };

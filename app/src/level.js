@@ -5,12 +5,14 @@ function Level() {
   this.explorerY = 0;
   this.explorerFriction = 0.05;
   this.treasureX = 436;
-  this.treasureY = 244;
+  this.treasureY = 440;
   this.numberBlobs = 0;
   this.blobSpacing = 48;
   this.blobXOffset = 102;
   this.blobSpeed = 2;
   this.numberArrows = 0;
+  this.arrowSpacing = 100;
+  this.arrowYOffset = 46;
   this.arrowSpeed = 3;
   this.arrowDelay = 9999;
   this.holePositions = [];
@@ -89,6 +91,6 @@ Level.prototype.createArrow = function(x, y) {
 
 Level.prototype.createArrowWave = function(number){
   for (var i = 0; i < number; i++) {
-    this.createArrow(20, 46+(i*100));
+    this.createArrow(20, this.arrowYOffset+(i*this.arrowSpacing));
   }
 };

@@ -3,7 +3,7 @@ var newLevelScene, gameScene, endScene, gameOverScene;
 var levelMessage, endMessage, progressMessage, replayMessage;
 var newLevelDelay = 900;
 var level = 1;
-var maxLevel = 7;
+var maxLevel = 8;
 var font = {font: "64px Futura", fill: "white", align: "center",
     dropShadow: "true", dropShadowColor: "#6DAA2C", dropShadowDistance: 4};
 var stageSize = [512, 512];

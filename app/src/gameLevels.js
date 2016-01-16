@@ -29,8 +29,8 @@ level3.setUp = function() {
 level4 = new Level();
 level4.setUp = function() {
   level4.dungeon = "iceDungeon";
-  level4.holePositions = [[55, 250], [ 240, 45], [330, 330]];
-  level4.holeSizes = [[200, 200], [130, 130], [100, 100]];
+  level4.holePositions = [[38, 220], [240, 32], [330, 330], [185, 405], [305, 32]];
+  level4.holeSizes = [[200, 200], [130, 130], [100, 100], [70, 70], [30, 30]];
   level4.populate();
 };
 
@@ -66,3 +66,19 @@ level7.setUp = function() {
   level7.holeSizes = [[100, 100], [28, 28], [50, 50], [32, 32], [66, 66], [47, 47], [80, 80], [70, 70]];
   level7.populate();
 };
+
+level8 = new Level();
+level8.setUp = function() {
+  level8.dungeon = "dungeon";
+  level8.treasureY = 440;
+  level8.numberBlobs = 8;
+  level3.blobSpeed = 3;
+  level8.numberArrows = 7;
+  level8.arrowDelay = 1200;
+  level8.arrowSpacing = 68;
+  level8.populate();
+};
+
+
+
+  
