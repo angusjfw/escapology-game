@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     cb();
   }
 
+  window.levelSetup = levelSetup;
   function levelSetup(cb) {
     clearScene();
     thisLevel = currentLevel();
@@ -176,3 +177,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     healthBar = new HealthBar();
   }
 });
+
+function setLevel(number) {
+  healthBar.heal();
+  level = number;
+  state = window.levelSetup;
+}
