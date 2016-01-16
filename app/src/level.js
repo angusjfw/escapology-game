@@ -26,6 +26,8 @@ Level.prototype.populate = function() {
   door.position.set(this.doorPosition[0], this.doorPosition[1]);
   explorer.x = this.explorerX;
   explorer.y = this.explorerY;
+  explorer.vx = 0;
+  explorer.vy = 0;
   explorer.friction = this.explorerFriction;
   treasure.x = this.treasureX;
   treasure.y = this.treasureY;
@@ -77,9 +79,8 @@ Level.prototype.createBlobWave = function(number) {
 
 Level.prototype.createArrow = function(x, y) {
   arrow = new Arrow(resources["images/arrow.png"].texture);
-  arrow.width = 20;
-  arrow.height = 40;
-  arrow.rotation = 1.6;
+  arrow.width = 40;
+  arrow.height = 10;
   arrow.position.set(x, y);
   arrow.vx = this.arrowSpeed;
   arrows.push(arrow);

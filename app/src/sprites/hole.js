@@ -1,4 +1,5 @@
 function Hole(texture) {
+
   PIXI.Sprite.call(this, texture);
   this.hitbox = new PIXI.Sprite();
   this.addChild(this.hitbox);
@@ -37,8 +38,8 @@ Hole.prototype.switchScene = function(){
 };
 
 Hole.prototype.positionHitbox = function() {
-  this.hitbox.x = this.x + (this.width * 0.17);
-  this.hitbox.y = this.y + (this.height * 0.17);
-  this.hitbox.width = this.width * 0.66;
-  this.hitbox.height = this.height * 0.66;
+  this.hitbox.x = this.x + (this.width * 0.2);
+  this.hitbox.y = this.y + (this.height * 0.2);
+  this.hitbox.width = this.width * 0.6;
+  this.hitbox.height = this.height * 0.6;
 };

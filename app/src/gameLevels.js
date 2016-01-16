@@ -4,6 +4,7 @@ level1.setUp = function() {
   level1.explorerX = 68;
   level1.explorerY = stageSize[1] / 2 - explorer.height / 2; 
   level1.numberBlobs = 7;
+  level1.blobSpeed = 3;
   level1.populate();
 };
 
@@ -11,7 +12,7 @@ level2 = new Level();
 level2.setUp = function(){
   level2.dungeon = "dungeon";
   level2.numberArrows = 5;
-  level2.arrowDelay = 1000;
+  level2.arrowDelay = 650;
   level2.populate();
 };
 
@@ -21,6 +22,7 @@ level3.setUp = function() {
   level3.numberBlobs = 5;
   level3.blobSpacing = 60;
   level3.blobXOffset = 130;
+  level3.blobSpeed = 2.5;
   level3.populate();
 };
 
@@ -36,15 +38,16 @@ level5 = new Level();
 level5.setUp = function() {
   level5.dungeon = "dungeon";
   level5.numberBlobs = 7;
+  level5.blobSpeed = 3;
   level5.numberArrows = 5;
-  level5.arrowDelay = 1800;
+  level5.arrowSpeed = 5;
+  level5.arrowDelay = 1600;
   level5.populate();
 };
 
 level6 = new Level();
 level6.setUp = function() {
   level6.dungeon = "iceDungeon";
-  level6.explorerFriction = 0.07;
   level6.numberBlobs = 4;
   level6.blobSpacing = 60;
   level6.blobXOffset = 150;

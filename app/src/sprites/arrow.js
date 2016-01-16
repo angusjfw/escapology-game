@@ -11,4 +11,9 @@ Arrow.prototype.action = function() {
   if (arrowHitsWall === "right" || arrowHitsWall === "left") {
     this.vx = 0;
   }
+
+  if (hitTestRectangle(explorer, this)) {
+    healthBar.damage(3);
+    explorer.hit = true;
+  }
 };

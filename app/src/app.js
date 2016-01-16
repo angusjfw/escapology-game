@@ -1,9 +1,11 @@
-var state, win, level, thisLevel, thisLevelSetup, gameScene, id;
-var newLevelScene, gameOverScene, levelMessage, endMessage, replayMessage;
-var newLevelDelay = 800;
+var state, level, win, thisLevel, thisLevelSetup, id;
+var newLevelScene, gameScene, endScene, gameOverScene;
+var levelMessage, endMessage, progressMessage, replayMessage;
+var newLevelDelay = 900;
 var level = 1;
 var maxLevel = 7;
-var font = {font: "64px Futura", fill: "white", align: "center"};
+var font = {font: "64px Futura", fill: "white", align: "center",
+    dropShadow: "true", dropShadowColor: "#6DAA2C", dropShadowDistance: 4};
 var stageSize = [512, 512];
 
 var dungeon, door, explorer, treasure, blob, arrow, hole, ladder, healthBar;
@@ -43,52 +45,63 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function play(cb) {
-    explorer.move();
-    useLadder();
-    moveDangersAndTestHit([blobs, arrows, holes]);
-    reactToHit();
-    carryTreasure();
+    controlScenes();
+    spriteAction([blobs, arrows, holes, [explorer], [ladder], [treasure]]);
     checkLoss();
     checkWin();
-    endMessage.text = win ? "You won!":"You lost!";
     cb();
   }
 
   function levelSetup(cb) {
     clearScene();
+    thisLevel = currentLevel();
+    gameScene = thisLevel.gameScene;
+    gameScene.visible = true;
+    stage.addChild(gameScene);
+    thisLevel.setUp();
     showLevelMessage();
 
     setTimeout(function() {
-      thisLevel = currentLevel();
-      gameScene = thisLevel.gameScene;
-      stage.addChild(gameScene);
-      thisLevel.setUp();
-
+      stage.removeChild(newLevelScene);
       newLevelScene.visible = false;
-      gameScene.visible = true;
       state = play;
       cb();
     }, newLevelDelay);
   }
 
   function end(cb) {
-    stage.addChild(gameOverScene);
-    gameOverScene.addChild(endMessage);
-    gameScene.visible = false;
-    gameOverScene.visible = true;
+    stage.addChild(endScene);
+    endScene.addChild(endMessage);
     setTimeout(function() {
+      endScene.removeChild(endMessage);
+      stage.removeChild(endScene);
+      endScene.visible = false;
+      stage.addChild(gameOverScene);
+      gameScene.visible = false;
+      gameOverScene.visible = true;
       gameOverScene.addChild(replayMessage);
-      endMessage.text = "You completed\n" + (win ? level:level-1) + "/" +
-                        maxLevel +" levels!";
-      endMessage.x = stageSize[0] / 2 - 216;
-      endMessage.y = stageSize[1] / 2 - 170;
+      gameOverScene.addChild(progressMessage);
+      completed = win ? level:(level-1);
+      progressMessage.text = "You completed\n" + completed + "/" + maxLevel +
+                             " levels!";
     }, 1500);
     cb();
   }
 
   function replay() {
-    document.location.reload();
+    gameOverScene.visible = false;
+    level = 1;
+    win = undefined;
+    healthBar.heal();
+    state = levelSetup;
   }
+
+  function controlScenes() {
+    gameOverScene.visible = false;
+    gameScene.visible = true;
+    endScene.visible = true;
+  }
+
 
   function clearScene() {
     for (var i = stage.children.length - 1; i >= 0; i--) {
@@ -104,44 +117,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
     renderer.render(stage);
   }
 
-  function useLadder() {
-    if (ladder) {
-      ladder.action();
-    }
-  }
-
-  function moveDangersAndTestHit(dangerTypes) {
-    dangerTypes.forEach(function(dangerType) {
-      dangerType.forEach(function(danger) {
-        danger.action();
-        if (hitTestRectangle(explorer, danger) && !(danger instanceof Hole)) {
-          explorer.hit = true;
+  function spriteAction(spriteTypes) {
+    spriteTypes.forEach(function(spriteType) {
+      spriteType.forEach(function(sprite) {
+        if (sprite) {
+          sprite.action();
         }
       });
     });
   }
 
-  function reactToHit() {
-    if(explorer.hit) {
-      explorer.alpha = 0.5;
-      healthBar.damage(1);
-    } else {
-      explorer.alpha = 1;
-    }
-  }
-
-  function carryTreasure(){
-    if (hitTestRectangle(explorer, treasure)) {
-      treasure.x = explorer.x + 8;
-      treasure.y = explorer.y + 8;
-    }
-  }
-
   function checkWin() {
     if (hitTestRectangle(treasure, door)) {
       if (level == maxLevel) {
-        state = end;
+        endMessage.text = "You won!";
         win = true;
+        state = end;
       } else {
         level += 1;
         state = levelSetup;
@@ -151,8 +142,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function checkLoss() {
     if (healthBar.outerBar.width < 0) {
-      state = end;
+      endMessage.text = "You lost!";
       win = false;
+      state = end;
     }
   }
 
@@ -162,10 +154,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
     levelMessage.x = 140;
     levelMessage.y = stageSize[1] / 2 - 70;
 
-    gameOverScene = new Container();
-    endMessage = new Text("The End!", font);
+    endScene = new Container();
+    endMessage = new Text("", font);
     endMessage.x = 130;
     endMessage.y = stageSize[1] / 2 - 70;
+
+    gameOverScene = new Container();
+    progressMessage = new Text("", font);
+    progressMessage.x = stageSize[0] / 2 - 216;
+    progressMessage.y = stageSize[1] / 2 - 170;
     replayMessage = new Text("Play again?", font);
     replayMessage.x = 94;
     replayMessage.y = 300;
