@@ -88,11 +88,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function replay() {
-    gameOverScene.visible = false;
-    level = 1;
-    win = undefined;
-    healthBar.heal();
-    state = levelSetup;
+    document.location.reload();
   }
 
   function controlScenes() {
