@@ -78,7 +78,3 @@ level8.setUp = function() {
   level8.arrowSpacing = 68;
   level8.populate();
 };
-
-
-
-  
